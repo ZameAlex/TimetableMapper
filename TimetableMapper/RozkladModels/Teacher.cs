@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimetableMapper
+namespace TimetableMapper.RozkladModels
 {
-    public class Class1
+    public class Teacher
     {
+        public string Name { get; set; }
     }
 }
