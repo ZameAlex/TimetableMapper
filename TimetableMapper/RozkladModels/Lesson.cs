@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TimetableMapper.RozkladModels.Enums;
+using TimetableMapper.Enums;
 
 namespace TimetableMapper.RozkladModels
 {

@@ -43,12 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\AbstractClient.cs" />
+    <Compile Include="FpmModels\Group.cs" />
     <Compile Include="FpmModels\Lesson.cs" />
+    <Compile Include="FpmModels\ResultLesson.cs" />
     <Compile Include="FpmModels\Subject.cs" />
     <Compile Include="FpmModels\Teacher.cs" />
+    <Compile Include="FpmRequests\FpmClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RozkladModels\Enums\Day.cs" />
-    <Compile Include="RozkladModels\Enums\LessonNumber.cs" />
+    <Compile Include="Enums\Day.cs" />
+    <Compile Include="Enums\LessonNumber.cs" />
     <Compile Include="RozkladModels\Lesson.cs" />
     <Compile Include="RozkladModels\Subject.cs" />
     <Compile Include="RozkladModels\Teacher.cs" />

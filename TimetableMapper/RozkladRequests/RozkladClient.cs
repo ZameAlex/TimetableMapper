@@ -5,24 +5,21 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using TimetableMapper.Client;
 using TimetableMapper.RozkladModels;
-using TimetableMapper.RozkladModels.Enums;
+using TimetableMapper.Enums;
 
 namespace TimetableMapper.RozkladRequests
 {
-    public class RozkladClient
+    public class RozkladClient:AbstractClient
     {
-        private HttpClient client;
-        private HttpRequestMessage message;
-        private Dictionary<string, string> getTimetableBodyDictionary;
-        private Dictionary<string, string> headers;
         private const string FIRST_WEEK = "ctl00_MainContent_FirstScheduleTable";
         private const string SECOND_WEEK = "ctl00_MainContent_SecondScheduleTable";
         public RozkladClient()
         {
             client = new HttpClient(new HttpClientHandler() { UseCookies = false });
             message = new HttpRequestMessage();
-            getTimetableBodyDictionary = new Dictionary<string, string>();
+            Timetable = new Dictionary<string, string>();
             headers = new Dictionary<string, string>();
             //headers initialization
             headers.Add("Host", "rozklad.kpi.ua");
@@ -35,12 +32,6 @@ namespace TimetableMapper.RozkladRequests
             headers.Add("Accept-Language", "gen-US,en;q=0.9");
             headers.Add("Cookie", "_ga=GA1.2.826275426.1517305737");
             
-        }
-
-        private void SetHeaders(HttpRequestMessage message)
-        {
-            foreach (var item in headers)
-                message.Headers.Add(item.Key, item.Value);
         }
 
         private List<Lesson> ParseTable(HtmlNode table,bool firstWeek)
@@ -84,7 +75,7 @@ namespace TimetableMapper.RozkladRequests
             var inputs = document.DocumentNode.SelectNodes(@"//input[@type='hidden']");
             foreach(var item in inputs)
             {
-                getTimetableBodyDictionary.Add(item.Attributes["name"].Value, item.Attributes["value"].Value);
+                Timetable.Add(item.Attributes["name"].Value, item.Attributes["value"].Value);
             }
         }
 
@@ -94,14 +85,14 @@ namespace TimetableMapper.RozkladRequests
         {
             await InitRequest();
             //Group selection
-            getTimetableBodyDictionary.Add("ctl00$MainContent$ctl00$txtboxGroup", "КП-51");
+            Timetable.Add("ctl00$MainContent$ctl00$txtboxGroup", "КП-51");
             message = new HttpRequestMessage();
             SetHeaders(message);
             message.Headers.Add("Referer", "http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
             message.Method = HttpMethod.Post;
             message.RequestUri = new Uri("http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
-            getTimetableBodyDictionary.Add("ctl00$MainContent$ctl00$btnShowSchedule", "Розклад занять");
-            message.Content = new FormUrlEncodedContent(getTimetableBodyDictionary);
+            Timetable.Add("ctl00$MainContent$ctl00$btnShowSchedule", "Розклад занять");
+            message.Content = new FormUrlEncodedContent(Timetable);
             var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
             var document = new HtmlDocument();
             document.LoadHtml(response);

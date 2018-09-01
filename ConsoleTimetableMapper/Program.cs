@@ -7,6 +7,7 @@ using TimetableMapper.RozkladModels;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using TimetableMapper.RozkladRequests;
+using TimetableMapper.FpmRequests;
 
 namespace ConsoleTimetableMapper
 {
@@ -14,7 +15,7 @@ namespace ConsoleTimetableMapper
     {
         static void Main(string[] args)
         {
-            RozkladClient client = new RozkladClient();
+            /*RozkladClient client = new RozkladClient();
             var result = client.GetTimetable().Result;
             foreach(var item in result[0])
             {
@@ -24,7 +25,11 @@ namespace ConsoleTimetableMapper
             foreach (var item in result[1])
             {
                 Console.WriteLine(item);
-            }
+            }*/
+            FpmClient client = new FpmClient();
+            client.InitRequest().Wait();
+            client.Login().Wait();
+            client.SelectSubjectToGroup().Wait();
         }
 
        
