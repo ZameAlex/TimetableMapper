@@ -13,6 +13,12 @@ namespace TimetableMapper.RozkladModels
         public Teacher Teacher { get; set; }
         public Day Day { get; set; }
         public LessonNumber LessonNumber { get; set; }
+        public string LessonType { get; set; }
         public bool FirstWeek { get; set; }
+
+        public override string ToString()
+        {
+            return $"LessonNumber: {LessonNumber} Day: {Day.ToString()}, Teacher: {Teacher}, Subject: {Subject}, LessonType: {LessonType}";
+        }
     }
 }

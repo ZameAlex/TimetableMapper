@@ -14,10 +14,17 @@ namespace ConsoleTimetableMapper
     {
         static void Main(string[] args)
         {
-            Lesson[] FirstWeek = new Lesson[7];
-            Lesson[] SecondWeek = new Lesson[7];
             RozkladClient client = new RozkladClient();
-            client.InitRequest().Wait();
+            var result = client.GetTimetable().Result;
+            foreach(var item in result[0])
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine();
+            foreach (var item in result[1])
+            {
+                Console.WriteLine(item);
+            }
         }
 
        
