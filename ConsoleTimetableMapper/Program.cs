@@ -15,7 +15,7 @@ namespace ConsoleTimetableMapper
     {
         static void Main(string[] args)
         {
-            /*RozkladClient client = new RozkladClient();
+            RozkladClient client = new RozkladClient();
             var result = client.GetTimetable().Result;
             foreach(var item in result[0])
             {
@@ -25,11 +25,11 @@ namespace ConsoleTimetableMapper
             foreach (var item in result[1])
             {
                 Console.WriteLine(item);
-            }*/
-            FpmClient client = new FpmClient();
-            client.InitRequest().Wait();
-            client.Login().Wait();
-            client.SelectSubjectToGroup().Wait();
+            }
+            FpmClient fpmClient = new FpmClient();
+            fpmClient.InitRequest().Wait();
+            fpmClient.Login().Wait();
+            fpmClient.SelectSubjectToGroup().Wait();
         }
 
        

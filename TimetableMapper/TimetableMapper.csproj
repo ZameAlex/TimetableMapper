@@ -50,6 +50,9 @@
     <Compile Include="FpmModels\Subject.cs" />
     <Compile Include="FpmModels\Teacher.cs" />
     <Compile Include="FpmRequests\FpmClient.cs" />
+    <Compile Include="Mappers\LessonsMapper.cs" />
+    <Compile Include="Mappers\SubjectsMapper.cs" />
+    <Compile Include="Mappers\TechersMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enums\Day.cs" />
     <Compile Include="Enums\LessonNumber.cs" />

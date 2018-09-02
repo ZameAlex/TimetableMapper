@@ -34,34 +34,7 @@ namespace TimetableMapper.RozkladRequests
             
         }
 
-        private List<Lesson> ParseTable(HtmlNode table,bool firstWeek)
-        {
-            var result = new List<Lesson>();
-            var trs = table.ChildNodes.Skip(2).Take(5).ToList();
-            int lessonNumber = 1;
-            foreach(var tr in trs)
-            {
-                var tds = tr.ChildNodes.Skip(2).Take(6).ToList();
-                for(int i=0;i<tds.Count;i++)
-                {
-                    if (String.IsNullOrWhiteSpace(tds[i].InnerText))
-                        continue;
-                    Lesson tempLesson = new Lesson()
-                    {
-                        Day = (Day)i,
-                        FirstWeek = firstWeek,
-                        LessonNumber = (LessonNumber)lessonNumber,
-                        LessonType = tds[i].LastChild.InnerText,
-                        Subject = new Subject() { Name = tds[i].ChildNodes[0].ChildNodes[0].InnerText },
-                        Teacher = new Teacher() { Name = tds[i].ChildNodes[2].InnerText }
-                    };
-                    result.Add(tempLesson);
-                }
-                lessonNumber++;
-            }
-            return result;
 
-        }
 
         private async Task InitRequest()
         {
@@ -85,7 +58,7 @@ namespace TimetableMapper.RozkladRequests
         {
             await InitRequest();
             //Group selection
-            Timetable.Add("ctl00$MainContent$ctl00$txtboxGroup", "КП-51");
+            Timetable.Add("ctl00$MainContent$ctl00$txtboxGroup", "КП-73");
             message = new HttpRequestMessage();
             SetHeaders(message);
             message.Headers.Add("Referer", "http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
@@ -101,5 +74,36 @@ namespace TimetableMapper.RozkladRequests
             result[1] = ParseTable(document.DocumentNode.SelectSingleNode($@"//table[@id='{SECOND_WEEK}']"),false);
             return result;
         }
+
+        #region HelperMethods
+        private List<Lesson> ParseTable(HtmlNode table, bool firstWeek)
+        {
+            var result = new List<Lesson>();
+            var trs = table.ChildNodes.Skip(2).Take(5).ToList();
+            int lessonNumber = 1;
+            foreach (var tr in trs)
+            {
+                var tds = tr.ChildNodes.Skip(2).Take(6).ToList();
+                for (int i = 0; i < tds.Count; i++)
+                {
+                    if (String.IsNullOrWhiteSpace(tds[i].InnerText))
+                        continue;
+                    Lesson tempLesson = new Lesson()
+                    {
+                        Day = (Day)i,
+                        FirstWeek = firstWeek,
+                        LessonNumber = (LessonNumber)lessonNumber,
+                        LessonType = tds[i].LastChild.InnerText,
+                        Subject = new Subject() { Name = tds[i].ChildNodes[0].ChildNodes[0].InnerText },
+                        Teacher = new Teacher() { Name = tds[i].ChildNodes[2].InnerText }
+                    };
+                    result.Add(tempLesson);
+                }
+                lessonNumber++;
+            }
+            return result;
+
+        }
+        #endregion
     }
 }

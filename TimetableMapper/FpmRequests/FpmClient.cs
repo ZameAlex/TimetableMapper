@@ -10,13 +10,14 @@ using HtmlAgilityPack;
 
 namespace TimetableMapper.FpmRequests
 {
-    public class FpmClient:AbstractClient
+    public class FpmClient : AbstractClient
     {
         private string sessionId;
         private List<Group> groups;
         private List<Subject> subjects;
         private List<Teacher> teachers;
-        public FpmClient():base()
+        private const string SUBJECTS_TEACHERS_FORM_NAME = "scheduler_groupToSubjectsForm";
+        public FpmClient() : base()
         {
             groups = new List<Group>();
             subjects = new List<Subject>();
@@ -58,7 +59,7 @@ namespace TimetableMapper.FpmRequests
             var document = new HtmlDocument();
             document.LoadHtml(response);
             var options = document.DocumentNode.SelectNodes("//option").Skip(1);
-            foreach(var option in options)
+            foreach (var option in options)
             {
                 groups.Add(new Group()
                 {
@@ -66,6 +67,30 @@ namespace TimetableMapper.FpmRequests
                     Id = option.Attributes["value"].Value
                 });
             }
+            subjects = FormParsing(document.DocumentNode.SelectSingleNode($"//form[@name='{SUBJECTS_TEACHERS_FORM_NAME}']"));
         }
+
+        #region HelperMethods
+        private List<Subject> FormParsing(HtmlNode form)
+        {
+            var result = new List<Subject>();
+            var table = form.Element("table");
+            var trs = table.Elements("tr").Skip(2).ToList();
+            trs.RemoveAt(trs.Count - 1);   
+            foreach (var tr in trs)
+            {
+                var childNodes = tr.Elements("td").ToList();
+                var tempSubject = new Subject()
+                {
+                    Id = childNodes.First().ChildNodes[1].Attributes["value"].Value,
+                    Name = childNodes.Last().ChildNodes[1].InnerText.Replace("&#39;", "'")
+            };
+                result.Add(tempSubject);
+            }
+            foreach(var sbj in result)
+                Console.WriteLine(sbj.Name);
+            return result;
+        }
+        #endregion HelperMethods
     }
 }
