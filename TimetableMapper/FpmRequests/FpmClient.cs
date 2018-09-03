@@ -13,15 +13,15 @@ namespace TimetableMapper.FpmRequests
     public class FpmClient : AbstractClient
     {
         private string sessionId;
-        private List<Group> groups;
-        private List<Subject> subjects;
-        private List<Teacher> teachers;
+        public List<Group> Groups { get; set; }
+        public List<Subject> Subjects{ get; set; }
+        public List<Teacher> Teachers { get; set; }
         private const string SUBJECTS_TEACHERS_FORM_NAME = "scheduler_groupToSubjectsForm";
         public FpmClient() : base()
         {
-            groups = new List<Group>();
-            subjects = new List<Subject>();
-            teachers = new List<Teacher>();
+            Groups = new List<Group>();
+            Subjects = new List<Subject>();
+            Teachers = new List<Teacher>();
             headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
             headers.Add("Accept-Encoding", "gzip, deflate");
             headers.Add("Accept-Language", "uk-UA,uk;q=0.9,ru;q=0.8,en-US;q=0.7,en;q=0.6");
@@ -61,13 +61,30 @@ namespace TimetableMapper.FpmRequests
             var options = document.DocumentNode.SelectNodes("//option").Skip(1);
             foreach (var option in options)
             {
-                groups.Add(new Group()
+                Groups.Add(new Group()
                 {
-                    Name = option.InnerText,
-                    Id = option.Attributes["value"].Value
+                    Name = option.InnerText.ToString(),
+                    Id = option.Attributes["value"].Value.ToString()
                 });
             }
-            subjects = FormParsing(document.DocumentNode.SelectSingleNode($"//form[@name='{SUBJECTS_TEACHERS_FORM_NAME}']"));
+            Subjects = FormParsing(document.DocumentNode.SelectSingleNode($"//form[@name='{SUBJECTS_TEACHERS_FORM_NAME}']"));
+        }
+
+        public async Task SetSubjectToGroup(Group group, List<Subject> subjects)
+        {
+            message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/groups/dependence/save_subjects.do");
+            SetHeaders(message);
+            List<KeyValuePair<string, string>> ids = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("group_id",group.Id)
+            };
+            foreach(var item in subjects)
+            {
+                if (item != null)
+                    ids.Add(new KeyValuePair<string, string>("ids", item.Id));
+            }
+            message.Content = new FormUrlEncodedContent(ids);
+            var response = await client.SendAsync(message);
         }
 
         #region HelperMethods
@@ -83,12 +100,10 @@ namespace TimetableMapper.FpmRequests
                 var tempSubject = new Subject()
                 {
                     Id = childNodes.First().ChildNodes[1].Attributes["value"].Value,
-                    Name = childNodes.Last().ChildNodes[1].InnerText.Replace("&#39;", "'")
-            };
+                    Name = childNodes.Last().ChildNodes[1].InnerText.Replace("&#39;", $"{(char)8216}")
+                };
                 result.Add(tempSubject);
             }
-            foreach(var sbj in result)
-                Console.WriteLine(sbj.Name);
             return result;
         }
         #endregion HelperMethods

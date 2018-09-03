@@ -15,8 +15,10 @@ namespace TimetableMapper.RozkladRequests
     {
         private const string FIRST_WEEK = "ctl00_MainContent_FirstScheduleTable";
         private const string SECOND_WEEK = "ctl00_MainContent_SecondScheduleTable";
-        public RozkladClient()
+        private readonly string group;
+        public RozkladClient(string group)
         {
+            this.group = group;
             client = new HttpClient(new HttpClientHandler() { UseCookies = false });
             message = new HttpRequestMessage();
             Timetable = new Dictionary<string, string>();
@@ -58,7 +60,7 @@ namespace TimetableMapper.RozkladRequests
         {
             await InitRequest();
             //Group selection
-            Timetable.Add("ctl00$MainContent$ctl00$txtboxGroup", "КП-73");
+            Timetable.Add("ctl00$MainContent$ctl00$txtboxGroup", group);
             message = new HttpRequestMessage();
             SetHeaders(message);
             message.Headers.Add("Referer", "http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
@@ -74,6 +76,9 @@ namespace TimetableMapper.RozkladRequests
             result[1] = ParseTable(document.DocumentNode.SelectSingleNode($@"//table[@id='{SECOND_WEEK}']"),false);
             return result;
         }
+
+       
+
 
         #region HelperMethods
         private List<Lesson> ParseTable(HtmlNode table, bool firstWeek)
@@ -94,15 +99,18 @@ namespace TimetableMapper.RozkladRequests
                         FirstWeek = firstWeek,
                         LessonNumber = (LessonNumber)lessonNumber,
                         LessonType = tds[i].LastChild.InnerText,
-                        Subject = new Subject() { Name = tds[i].ChildNodes[0].ChildNodes[0].InnerText },
-                        Teacher = new Teacher() { Name = tds[i].ChildNodes[2].InnerText }
+                        Subject = new Subject()
+                        {
+                            Name = tds[i].ChildNodes[0].ChildNodes[0].InnerText.Replace((char)39, (char)8216),
+                            Title = tds[i].ChildNodes[0].ChildNodes[0].Attributes["title"].Value.Replace((char)39, (char)8216)
+                        },
+                        Teacher = new Teacher() { Name = tds[i].ChildNodes[2].InnerText.Replace((char)39,(char)8216 )}
                     };
                     result.Add(tempLesson);
                 }
                 lessonNumber++;
             }
             return result;
-
         }
         #endregion
     }
