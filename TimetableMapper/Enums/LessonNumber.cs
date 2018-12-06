@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TimetableMapper.Enums
+﻿namespace TimetableMapper.Enums
 {
-    public enum LessonNumber
-    {
-        First = 1,
-        Second,
-        Third,
-        Fourth,
-        Fifth
-    }
+	public enum LessonNumber
+	{
+		First = 1,
+		Second,
+		Third,
+		Fourth,
+		Fifth
+	}
 }

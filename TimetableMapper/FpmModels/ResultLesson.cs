@@ -7,12 +7,12 @@ using TimetableMapper.Enums;
 
 namespace TimetableMapper.FpmModels
 {
-    public class ResultLesson
-    {
-        public Lesson FirstWeekLesson { get; set; }
-        public Lesson SecondWeekLesson { get; set; }
-        public Day MyProperty { get; set; }
-        public LessonNumber LessonNumber { get; set; }
-        public bool Flasher { get; set; }
-    }
+	public class ResultLesson
+	{
+		public FpmLesson FirstWeekLesson { get; set; }
+		public FpmLesson SecondWeekLesson { get; set; }
+		public Day DayOfWeek { get; set; }
+		public LessonNumber LessonNumber { get; set; }
+		public bool Flasher { get; set; }
+	}
 }

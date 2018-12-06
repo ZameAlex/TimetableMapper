@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TimetableMapper.FpmModels
 {
-    public class Teacher
-    {
-        public string Name { get; set; }
-        public string Id { get; set; }
-    }
+	public class FpmGroup
+	{
+		public string Name { get; set; }
+		public string Id { get; set; }
+	}
 }

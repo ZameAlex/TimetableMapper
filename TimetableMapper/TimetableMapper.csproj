@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack, Version=1.8.7.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.8.7\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.8.11.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.8.11\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,11 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\AbstractClient.cs" />
-    <Compile Include="FpmModels\Group.cs" />
-    <Compile Include="FpmModels\Lesson.cs" />
+    <Compile Include="FpmModels\FpmGroup.cs" />
+    <Compile Include="FpmModels\FpmLesson.cs" />
     <Compile Include="FpmModels\ResultLesson.cs" />
-    <Compile Include="FpmModels\Subject.cs" />
-    <Compile Include="FpmModels\Teacher.cs" />
+    <Compile Include="FpmModels\FpmSubject.cs" />
+    <Compile Include="FpmModels\FpmTeacher.cs" />
     <Compile Include="FpmRequests\FpmClient.cs" />
     <Compile Include="Mappers\LessonsMapper.cs" />
     <Compile Include="Mappers\SubjectsMapper.cs" />
@@ -56,12 +56,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enums\Day.cs" />
     <Compile Include="Enums\LessonNumber.cs" />
-    <Compile Include="RozkladModels\Lesson.cs" />
-    <Compile Include="RozkladModels\Subject.cs" />
-    <Compile Include="RozkladModels\Teacher.cs" />
+    <Compile Include="RozkladModels\RozkladLesson.cs" />
+    <Compile Include="RozkladModels\RozkladSubject.cs" />
+    <Compile Include="RozkladModels\RozkladTeacher.cs" />
     <Compile Include="RozkladRequests\RozkladClient.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
