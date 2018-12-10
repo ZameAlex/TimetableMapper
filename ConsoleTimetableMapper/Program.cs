@@ -28,15 +28,18 @@ namespace ConsoleTimetableMapper
 			FpmClient fpmClient = new FpmClient();
 			fpmClient.InitRequest().Wait();
 			fpmClient.Login().Wait();
-			fpmClient.SetSubjectsAndGroups().Wait();
+			fpmClient.GetSubjectsAndGroups().Wait();
+			fpmClient.GetTeachers().Wait();
 			SubjectsMapper subjectsMapper = new SubjectsMapper();
 			TeachersMapper teachersMapper = new TeachersMapper();
 			var mappedSubj = subjectsMapper.Map(fpmClient.Subjects, rzkSubjects);
 			var SubjuctIds = mappedSubj.Select(sbj => sbj.Value.FirstOrDefault()).ToList();
 			var group = fpmClient.Groups.Where(g => g.Name == groupName).First();
+			var res = new LessonsMapper().Map(rozkladLessons[0], rozkladLessons[1]);
 			//Add checking the right comparing of the subjects
 			fpmClient.SetSubjectToGroup(group, SubjuctIds).Wait();
 			//var mappedTeach = teachersMapper.Map(fpmClient.Teachers, rzkTeachers);
+			//var dailyLessons = firstWeekLessons.Where(l => l.Day == day).Union(secondWeekLessons.Where(l => l.Day == day)).ToList();
 		}
 
 

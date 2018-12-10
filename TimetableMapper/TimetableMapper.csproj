@@ -50,6 +50,7 @@
     <Compile Include="FpmModels\FpmSubject.cs" />
     <Compile Include="FpmModels\FpmTeacher.cs" />
     <Compile Include="FpmRequests\FpmClient.cs" />
+    <Compile Include="Mappers\IMapper.cs" />
     <Compile Include="Mappers\LessonsMapper.cs" />
     <Compile Include="Mappers\SubjectsMapper.cs" />
     <Compile Include="Mappers\TeachersMapper.cs" />

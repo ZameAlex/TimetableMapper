@@ -30,7 +30,7 @@ namespace TimetableMapper.Mappers
 			}
 		}
 
-		private List<FpmModels.FpmSubject> MapFpmSubjects(string[] rzkSubj, string[] rzkSubjTitle, List<FpmModels.FpmSubject> fpmSbj)
+		public List<FpmModels.FpmSubject> MapFpmSubjects(string[] rzkSubj, string[] rzkSubjTitle, List<FpmModels.FpmSubject> fpmSbj)
 		{
 			var result = new List<FpmModels.FpmSubject>();
 			var count = fpmSbj.Count;
@@ -75,13 +75,13 @@ namespace TimetableMapper.Mappers
 
 		}
 
-		public Dictionary<string, List<FpmModels.FpmSubject>> Map(List<FpmModels.FpmSubject> fpmSbj, List<RozkladModels.RozkladSubject> rzkSbj)
+		public Dictionary<RozkladSubject, List<FpmModels.FpmSubject>> Map(List<FpmModels.FpmSubject> fpmSbj, List<RozkladModels.RozkladSubject> rzkSbj)
 		{
-			var result = new Dictionary<string, List<FpmModels.FpmSubject>>();
+			var result = new Dictionary<RozkladSubject, List<FpmModels.FpmSubject>>();
 			var distinctSubjects = rzkSbj.Distinct(new SubjectComparer());
 			foreach (var subject in distinctSubjects)
 			{
-				result.Add(subject.Name, MapFpmSubjects(subject.Name.Split(' '), subject.Title.Split(' '), fpmSbj));
+				result.Add(subject, MapFpmSubjects(subject.Name.Split(' '), subject.Title.Split(' '), fpmSbj));
 			}
 			return result;
 		}

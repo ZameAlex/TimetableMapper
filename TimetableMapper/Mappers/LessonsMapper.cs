@@ -9,7 +9,7 @@ using TimetableMapper.RozkladModels;
 
 namespace TimetableMapper.Mappers
 {
-	public class LessonsMapper
+	public class LessonsMapper:IMapper<RozkladLesson,FpmLesson>
 	{
 		public List<ResultLesson> Map(List<RozkladLesson> firstWeekLessons, List<RozkladLesson> secondWeekLessons)
 		{
@@ -17,11 +17,11 @@ namespace TimetableMapper.Mappers
 			for (Day  day = 0; day < Day.Sunday; day++)
 			{
 				var dailyLessons = firstWeekLessons.Where(l => l.Day == day).Union(secondWeekLessons.Where(l => l.Day == day)).ToList();
-				for (LessonNumber lesson = 0; lesson < LessonNumber.Fifth; lesson++)
+				for (LessonNumber lesson = LessonNumber.First; lesson < LessonNumber.Fifth; lesson++)
 				{
 					Lazy<ResultLesson> resultLesson = new Lazy<ResultLesson>();
 					var lessonsByNumber = dailyLessons.Where(l => l.LessonNumber == lesson).ToList();
-					if (lessonsByNumber == null)
+					if (lessonsByNumber == null || lessonsByNumber.Count == 0)
 						continue;
 					switch (lessonsByNumber.Count)
 					{
@@ -44,6 +44,16 @@ namespace TimetableMapper.Mappers
 				}
 			}
 			return result;
+		}
+
+		public FpmLesson Map(RozkladLesson model)
+		{
+			throw new NotImplementedException();
+		}
+
+		public List<FpmLesson> Map(List<RozkladLesson> models)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

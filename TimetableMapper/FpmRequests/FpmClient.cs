@@ -65,7 +65,25 @@ namespace TimetableMapper.FpmRequests
 			var response = await client.SendAsync(message);
 		}
 
-		public async Task SetSubjectsAndGroups()
+		public async Task GetTeachers()
+		{
+			message = new HttpRequestMessage(HttpMethod.Get, "https://fpm.kpi.ua/scheduler/teachers/dependence/get_subjects.do");
+			SetHeaders(message);
+			var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
+			var document = new HtmlDocument();
+			document.LoadHtml(response);
+			var options = document.DocumentNode.SelectNodes("//option").Skip(1);
+			foreach (var option in options)
+			{
+				Teachers.Add(new FpmTeacher
+				{
+					Name = option.InnerText.ToString(),
+					Id = option.Attributes["value"].Value.ToString()
+				});
+			}
+		}
+
+		public async Task GetSubjectsAndGroups()
 		{
 			message = new HttpRequestMessage(HttpMethod.Get, "https://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
 			SetHeaders(message);
