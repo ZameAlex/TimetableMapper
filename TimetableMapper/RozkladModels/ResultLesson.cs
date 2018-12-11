@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TimetableMapper.Enums;
 
-namespace TimetableMapper.FpmModels
+namespace TimetableMapper.RozkladModels
 {
 	public class ResultLesson
 	{
-		public FpmLesson FirstWeekLesson { get; set; }
-		public FpmLesson SecondWeekLesson { get; set; }
+		public RozkladLesson FirstWeekLesson { get; set; }
+		public RozkladLesson SecondWeekLesson { get; set; }
 		public Day DayOfWeek { get; set; }
 		public LessonNumber LessonNumber { get; set; }
-		public bool Flasher { get; set; }
+		public bool Flasher { get; set; } = false;
 	}
 }

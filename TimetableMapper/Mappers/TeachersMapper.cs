@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimetableMapper.FpmModels;
+using TimetableMapper.RozkladModels;
 
 namespace TimetableMapper.Mappers
 {
-	public class TeachersMapper
+	public class TeachersMapper:IMapper<RozkladModels.RozkladTeacher,FpmModels.FpmTeacher>
 	{
 		private class SubjectComparer : IEqualityComparer<RozkladModels.RozkladTeacher>
 		{
@@ -56,6 +58,16 @@ namespace TimetableMapper.Mappers
 				result.Add(teacher.Name, MapFpmSubjects(teacher.Name.Split(' '), fpmTch));
 			}
 			return result;
+		}
+
+		public FpmTeacher Map(RozkladTeacher model)
+		{
+			throw new NotImplementedException();
+		}
+
+		public List<FpmTeacher> Map(List<RozkladTeacher> models)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

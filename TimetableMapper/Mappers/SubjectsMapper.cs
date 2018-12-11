@@ -8,7 +8,7 @@ using TimetableMapper.RozkladModels;
 
 namespace TimetableMapper.Mappers
 {
-	public class SubjectsMapper
+	public class SubjectsMapper:IMapper<RozkladSubject,FpmSubject>
 	{
 		public SubjectsMapper()
 		{
@@ -84,6 +84,16 @@ namespace TimetableMapper.Mappers
 				result.Add(subject, MapFpmSubjects(subject.Name.Split(' '), subject.Title.Split(' '), fpmSbj));
 			}
 			return result;
+		}
+
+		public FpmSubject Map(RozkladSubject model)
+		{
+			throw new NotImplementedException();
+		}
+
+		public List<FpmSubject> Map(List<RozkladSubject> models)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

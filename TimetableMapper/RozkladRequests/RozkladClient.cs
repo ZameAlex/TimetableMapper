@@ -98,7 +98,7 @@ namespace TimetableMapper.RozkladRequests
 						Day = (Day)i,
 						FirstWeek = firstWeek,
 						LessonNumber = (LessonNumber)lessonNumber,
-						LessonType = tds[i].LastChild.InnerText,
+						LessonTypeAndRoom = tds[i].LastChild.InnerText,
 						Subject = new RozkladSubject()
 						{
 							Name = tds[i].ChildNodes[0].ChildNodes[0].InnerText.Replace((char)39, (char)8216),

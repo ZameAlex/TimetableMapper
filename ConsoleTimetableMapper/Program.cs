@@ -35,7 +35,7 @@ namespace ConsoleTimetableMapper
 			var mappedSubj = subjectsMapper.Map(fpmClient.Subjects, rzkSubjects);
 			var SubjuctIds = mappedSubj.Select(sbj => sbj.Value.FirstOrDefault()).ToList();
 			var group = fpmClient.Groups.Where(g => g.Name == groupName).First();
-			var res = new LessonsMapper().Map(rozkladLessons[0], rozkladLessons[1]);
+			var res = new ResultLessonsMapper().Map(rozkladLessons[0], rozkladLessons[1]);
 			//Add checking the right comparing of the subjects
 			fpmClient.SetSubjectToGroup(group, SubjuctIds).Wait();
 			//var mappedTeach = teachersMapper.Map(fpmClient.Teachers, rzkTeachers);
