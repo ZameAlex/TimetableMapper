@@ -53,9 +53,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TimetableMapper\TimetableMapper.csproj">
-      <Project>{135d84ea-cee5-4821-a5f9-3d8ab0ebbbbe}</Project>
-      <Name>TimetableMapper</Name>
+    <ProjectReference Include="..\TimeTableLibrary\TimeTableLibrary.csproj">
+      <Project>{7f0f1089-b770-40cf-9de1-61dfe9864bf2}</Project>
+      <Name>TimeTableLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
