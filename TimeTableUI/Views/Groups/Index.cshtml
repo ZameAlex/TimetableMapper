@@ -1,7 +1,14 @@
-﻿
+﻿@using TimeTableLibrary.FpmModels;
+@model List<FpmGroup>
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<input list="groups"/>
+<datalist id="groups">
+	@foreach (var item in Model)
+	{
+		<option	value=@item.Name/>
+	}
+</datalist>
 

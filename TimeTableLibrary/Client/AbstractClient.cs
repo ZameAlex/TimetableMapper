@@ -16,11 +16,15 @@ namespace TimeTableLibrary.Client
 
 		public AbstractClient()
 		{
-			client = new HttpClient(new HttpClientHandler() { UseCookies = false });
+			client = new HttpClient(new HttpClientHandler()
+			{
+				UseCookies = false,
+				ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; },
+			});
 			message = new HttpRequestMessage();
 			Timetable = new Dictionary<string, string>();
 			headers = new Dictionary<string, string>();
-		}
+		} 
 
 		protected void SetHeaders(HttpRequestMessage message)
 		{

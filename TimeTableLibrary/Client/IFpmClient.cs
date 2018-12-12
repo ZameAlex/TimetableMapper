@@ -8,6 +8,9 @@ namespace TimeTableLibrary.Client
 {
 	public interface IFpmClient
 	{
+		List<FpmGroup> Groups { get; set; }
+		List<FpmSubject> Subjects { get; set; }
+		List<FpmTeacher> Teachers { get; set; }
 		Task Login(FpmUser user);
 		Task GetTeachers();
 		Task GetSubjectsAndGroups();

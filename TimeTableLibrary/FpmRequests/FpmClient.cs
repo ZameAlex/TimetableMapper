@@ -17,12 +17,16 @@ namespace TimeTableLibrary.FpmRequests
 	{
 		private string sessionId;
 		private FpmUser currentUser;
+
+		private const string SUBJECTS_TEACHERS_FORM_NAME = "scheduler_groupToSubjectsForm";
+
 		public List<FpmGroup> Groups { get; set; }
 		public List<FpmSubject> Subjects { get; set; }
 		public List<FpmTeacher> Teachers { get; set; }
-		private const string SUBJECTS_TEACHERS_FORM_NAME = "scheduler_groupToSubjectsForm";
+
 		public FpmClient() : base()
 		{
+			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 			Groups = new List<FpmGroup>();
 			Subjects = new List<FpmSubject>();
 			Teachers = new List<FpmTeacher>();
@@ -63,6 +67,7 @@ namespace TimeTableLibrary.FpmRequests
 				{"login", user.Login },
 				{"password",user.Password }
 			});
+			Encoding.GetEncoding("windows-1251");
 			var response = await client.SendAsync(message);
 		}
 
