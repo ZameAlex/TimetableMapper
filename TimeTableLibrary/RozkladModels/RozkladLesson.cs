@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TimetableMapper.Enums;
+using TimeTableLibrary.Enums;
 
-namespace TimetableMapper.RozkladModels
+namespace TimeTableLibrary.RozkladModels
 {
 	public class RozkladLesson : IEquatable<RozkladLesson>
 	{

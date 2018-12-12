@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using TimetableMapper.RozkladRequests;
-using TimetableMapper.FpmRequests;
-using TimetableMapper.Mappers;
+using TimeTableLibrary.FpmRequests;
+using TimeTableLibrary.Mappers;
+using TimeTableLibrary.RozkladRequests;
 
 namespace ConsoleTimetableMapper
 {
@@ -27,7 +27,7 @@ namespace ConsoleTimetableMapper
 			//var rzkTeachers = result[0].Select(r => r.Teacher).Union(result[1].Select(r => r.Teacher)).ToList();
 			FpmClient fpmClient = new FpmClient();
 			fpmClient.InitRequest().Wait();
-			fpmClient.Login().Wait();
+			fpmClient.Login(new TimeTableLibrary.FpmModels.FpmUser("leo","leoleo")).Wait();
 			fpmClient.GetSubjectsAndGroups().Wait();
 			fpmClient.GetTeachers().Wait();
 			SubjectsMapper subjectsMapper = new SubjectsMapper();
@@ -37,7 +37,7 @@ namespace ConsoleTimetableMapper
 			var group = fpmClient.Groups.Where(g => g.Name == groupName).First();
 			var res = new ResultLessonsMapper().Map(rozkladLessons[0], rozkladLessons[1]);
 			//Add checking the right comparing of the subjects
-			fpmClient.SetSubjectToGroup(group, SubjuctIds).Wait();
+			fpmClient.SetSubjectsToGroup(group, SubjuctIds).Wait();
 			//var mappedTeach = teachersMapper.Map(fpmClient.Teachers, rzkTeachers);
 			//var dailyLessons = firstWeekLessons.Where(l => l.Day == day).Union(secondWeekLessons.Where(l => l.Day == day)).ToList();
 		}

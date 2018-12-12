@@ -5,13 +5,13 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using TimetableMapper.Client;
-using TimetableMapper.RozkladModels;
-using TimetableMapper.Enums;
+using TimeTableLibrary.Client;
+using TimeTableLibrary.RozkladModels;
+using TimeTableLibrary.Enums;
 
-namespace TimetableMapper.RozkladRequests
+namespace TimeTableLibrary.RozkladRequests
 {
-	public class RozkladClient : AbstractClient
+	public class RozkladClient : AbstractClient, IRozkladClient
 	{
 		private const string FIRST_WEEK = "ctl00_MainContent_FirstScheduleTable";
 		private const string SECOND_WEEK = "ctl00_MainContent_SecondScheduleTable";
@@ -38,7 +38,7 @@ namespace TimetableMapper.RozkladRequests
 
 
 
-		private async Task InitRequest()
+		public async Task InitRequest()
 		{
 			SetHeaders(message);
 			message.Headers.Add("Referer", "http://rozklad.kpi.ua");
@@ -112,6 +112,7 @@ namespace TimetableMapper.RozkladRequests
 			}
 			return result;
 		}
+
 		#endregion
 	}
 }

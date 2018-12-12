@@ -1,4 +1,4 @@
-﻿namespace TimetableMapper.Enums
+﻿namespace TimeTableLibrary.Enums
 {
 	public enum Day
 	{

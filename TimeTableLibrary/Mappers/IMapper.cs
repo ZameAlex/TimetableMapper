@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimetableMapper.Mappers
+namespace TimeTableLibrary.Mappers
 {
 	interface IMapper<T, R> 
 	where T:class

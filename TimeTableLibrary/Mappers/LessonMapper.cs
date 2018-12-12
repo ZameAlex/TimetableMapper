@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TimetableMapper.FpmModels;
-using TimetableMapper.RozkladModels;
+using TimeTableLibrary.FpmModels;
+using TimeTableLibrary.RozkladModels;
 
-namespace TimetableMapper.Mappers
+namespace TimeTableLibrary.Mappers
 {
 	public class LessonMapper : IMapper<RozkladModels.RozkladLesson, FpmModels.FpmLesson>
 	{

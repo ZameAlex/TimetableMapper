@@ -4,18 +4,19 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using TimetableMapper.Client;
-using TimetableMapper.FpmModels;
+using TimeTableLibrary.Client;
+using TimeTableLibrary.FpmModels;
 using HtmlAgilityPack;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 
-namespace TimetableMapper.FpmRequests
+namespace TimeTableLibrary.FpmRequests
 {
-	public class FpmClient : AbstractClient
+	public class FpmClient : AbstractClient, IFpmClient
 	{
 		private string sessionId;
+		private FpmUser currentUser;
 		public List<FpmGroup> Groups { get; set; }
 		public List<FpmSubject> Subjects { get; set; }
 		public List<FpmTeacher> Teachers { get; set; }
@@ -40,7 +41,7 @@ namespace TimetableMapper.FpmRequests
 			headers.Add("Cookie", $"JSESSIONID={sessionId}");
 		}
 
-		public async Task Login()
+		public async Task Login(FpmUser user)
 		{
 			//disable safety certificate
 			ServicePointManager.ServerCertificateValidationCallback =
@@ -59,8 +60,8 @@ namespace TimetableMapper.FpmRequests
 			message.Method = HttpMethod.Post;
 			message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
 			{
-				{"login", "leo" },
-				{"password","leoleo" }
+				{"login", user.Login },
+				{"password",user.Password }
 			});
 			var response = await client.SendAsync(message);
 		}
@@ -102,7 +103,7 @@ namespace TimetableMapper.FpmRequests
 			Subjects = FormParsing(document.DocumentNode.SelectSingleNode($"//form[@name='{SUBJECTS_TEACHERS_FORM_NAME}']"));
 		}
 
-		public async Task SetSubjectToGroup(FpmGroup group, List<FpmSubject> subjects)
+		public async Task SetSubjectsToGroup(FpmGroup group, List<FpmSubject> subjects)
 		{
 			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/groups/dependence/save_subjects.do");
 			SetHeaders(message);
@@ -137,6 +138,11 @@ namespace TimetableMapper.FpmRequests
 				result.Add(tempSubject);
 			}
 			return result;
+		}
+
+		public Task SetTeacherToSubject(FpmTeacher teacher, FpmSubject subject)
+		{
+			throw new NotImplementedException();
 		}
 		#endregion HelperMethods
 	}

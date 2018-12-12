@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimetableMapper.RozkladModels
+namespace TimeTableLibrary.RozkladModels
 {
 	public class RozkladTeacher:IEquatable<RozkladTeacher>
 	{

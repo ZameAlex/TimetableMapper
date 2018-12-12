@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TimetableMapper.Enums;
-using TimetableMapper.FpmModels;
-using TimetableMapper.RozkladModels;
+using TimeTableLibrary.Enums;
+using TimeTableLibrary.FpmModels;
+using TimeTableLibrary.RozkladModels;
 
-namespace TimetableMapper.Mappers
+namespace TimeTableLibrary.Mappers
 {
 	public class ResultLessonsMapper
 	{

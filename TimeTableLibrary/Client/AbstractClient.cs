@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimetableMapper.Client
+namespace TimeTableLibrary.Client
 {
 	public abstract class AbstractClient
 	{
