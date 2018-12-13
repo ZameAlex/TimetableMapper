@@ -27,7 +27,7 @@ namespace TimeTableUI.Controllers
 		{
 			client.InitRequest();
 			client.Login(new FpmUser(user.Login, user.Password));
-			return RedirectToAction("Index", "SubjectsMapping");
+			return RedirectToAction("Index", "Dashboard");
 		}
     }
 }

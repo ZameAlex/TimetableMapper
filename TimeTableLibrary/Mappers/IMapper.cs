@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TimeTableLibrary.Mappers
 {
-	interface IMapper<T, R> 
+	public interface IMapper<T, R> 
 	where T:class
 	where R:class
 	{

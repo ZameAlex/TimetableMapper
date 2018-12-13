@@ -22,4 +22,8 @@
     <Folder Include="Views\TeachersMapping\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\css\DropDown.css" />
+  </ItemGroup>
+
 </Project>

@@ -3,12 +3,33 @@
 @{
     ViewData["Title"] = "Index";
 }
+<span class="col-lg-4"></span>
+<div class="col-lg-4">
+	<label></label>
+		<div class="form-group">
+			<input list="groups" class="form-control" id="groupInput"/>
+			<datalist id="groups">
+				@foreach (var item in Model)
+				{
+					<option value=@item.Name id="@item.Id"/>
+				}
+			</datalist>
+			<button class="form-control" onclick="submit()">Submit</button>
+		</div>
+</div>
 
-<input list="groups"/>
-<datalist id="groups">
-	@foreach (var item in Model)
-	{
-		<option	value=@item.Name/>
+<span class="col-lg-4"></span>
+
+<script>
+	function submit() {
+		var value = $("#groupInput").val();
+		var option = $("[value='" + value+"']");
+
+		if (option.length > 0) {
+			var id = option[0].id;
+			// do stuff with the id
+
+			$.post("/Groups/GroupMenu", { ID: id });
+		}
 	}
-</datalist>
-
+</script>

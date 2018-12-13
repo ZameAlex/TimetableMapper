@@ -10,7 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTableLibrary;
 using TimeTableLibrary.Client;
+using TimeTableLibrary.FpmModels;
 using TimeTableLibrary.FpmRequests;
+using TimeTableLibrary.Mappers;
+using TimeTableLibrary.RozkladModels;
 using TimeTableLibrary.RozkladRequests;
 
 namespace TimeTableUI
@@ -37,6 +40,9 @@ namespace TimeTableUI
 			
 			services.AddSingleton<IFpmClient, FpmClient>();
 			services.AddSingleton<IRozkladClient, RozkladClient>();
+
+			services.AddTransient<IElementsMapper<RozkladTeacher, FpmTeacher>,TeachersMapper>();
+			services.AddTransient<IElementsMapper<RozkladSubject, FpmSubject>, SubjectsMapper>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

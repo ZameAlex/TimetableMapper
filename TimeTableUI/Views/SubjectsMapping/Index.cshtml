@@ -11,7 +11,10 @@
 	<input type="text" name="" value="@item.Key" class="col-lg-4"/>
 	<div class="col-lg-4"></div>
 	<select asp-for="@item.Value">
-		
+		@foreach (var value in item.Value)
+		{
+			<option>@value.Name</option>
+		}
 	</select>
 }
 

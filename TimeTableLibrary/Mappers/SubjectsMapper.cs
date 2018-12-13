@@ -8,7 +8,7 @@ using TimeTableLibrary.RozkladModels;
 
 namespace TimeTableLibrary.Mappers
 {
-	public class SubjectsMapper:IMapper<RozkladSubject,FpmSubject>
+	public class SubjectsMapper:IElementsMapper<RozkladSubject, FpmSubject>
 	{
 		public SubjectsMapper()
 		{
@@ -30,7 +30,7 @@ namespace TimeTableLibrary.Mappers
 			}
 		}
 
-		public List<FpmModels.FpmSubject> MapFpmSubjects(string[] rzkSubj, string[] rzkSubjTitle, List<FpmModels.FpmSubject> fpmSbj)
+		private List<FpmSubject> MapFpmSubjects(string[] rzkSubj, string[] rzkSubjTitle, List<FpmSubject> fpmSbj)
 		{
 			var result = new List<FpmModels.FpmSubject>();
 			var count = fpmSbj.Count;
@@ -75,13 +75,13 @@ namespace TimeTableLibrary.Mappers
 
 		}
 
-		public Dictionary<RozkladSubject, List<FpmModels.FpmSubject>> Map(List<FpmModels.FpmSubject> fpmSbj, List<RozkladModels.RozkladSubject> rzkSbj)
+		public Dictionary<RozkladSubject, List<FpmSubject>> Map(List<FpmModels.FpmSubject> fpmElements, List<RozkladModels.RozkladSubject> rozkladElements)
 		{
 			var result = new Dictionary<RozkladSubject, List<FpmModels.FpmSubject>>();
-			var distinctSubjects = rzkSbj.Distinct(new SubjectComparer());
+			var distinctSubjects = rozkladElements.Distinct(new SubjectComparer());
 			foreach (var subject in distinctSubjects)
 			{
-				result.Add(subject, MapFpmSubjects(subject.Name.Split(' '), subject.Title.Split(' '), fpmSbj));
+				result.Add(subject, MapFpmSubjects(subject.Name.Split(' '), subject.Title.Split(' '), fpmElements));
 			}
 			return result;
 		}

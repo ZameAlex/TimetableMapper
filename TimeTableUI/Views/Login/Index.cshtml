@@ -1,10 +1,12 @@
 ﻿@using TimeTableUI.Models.TimeTableModels.FPM;
 @model User
 @{
-    ViewData["Title"] = "Login";
+	ViewData["Title"] = "Login";
 }
 
-@Layout=@null;
+@{
+	Layout = "_LoginLayout.cshtml";
+}
 
 <body>
 	<div class="col-lg-4"></div>
@@ -23,4 +25,3 @@
 	</form>
 	<br />
 </body>
-

@@ -8,9 +8,9 @@ using TimeTableLibrary.RozkladModels;
 
 namespace TimeTableLibrary.Mappers
 {
-	public class TeachersMapper:IMapper<RozkladModels.RozkladTeacher,FpmModels.FpmTeacher>
+	public class TeachersMapper:IElementsMapper<RozkladTeacher, FpmTeacher>
 	{
-		private class SubjectComparer : IEqualityComparer<RozkladModels.RozkladTeacher>
+		private class TeacherComparer : IEqualityComparer<RozkladModels.RozkladTeacher>
 		{
 			public bool Equals(RozkladModels.RozkladTeacher x, RozkladModels.RozkladTeacher y)
 			{
@@ -25,7 +25,7 @@ namespace TimeTableLibrary.Mappers
 			}
 		}
 
-		private List<FpmModels.FpmTeacher> MapFpmSubjects(string[] rzkTch, List<FpmModels.FpmTeacher> fpmTch)
+		private List<FpmTeacher> MapFpmTeachers(string[] rzkTch, List<FpmTeacher> fpmTch)
 		{
 			var result = new List<FpmModels.FpmTeacher>();
 			var count = fpmTch.Count;
@@ -49,13 +49,13 @@ namespace TimeTableLibrary.Mappers
 			return result;
 		}
 
-		public Dictionary<string, List<FpmModels.FpmTeacher>> Map(List<FpmModels.FpmTeacher> fpmTch, List<RozkladModels.RozkladTeacher> rzkTch)
+		public Dictionary<RozkladTeacher, List<FpmTeacher>> Map(List<FpmModels.FpmTeacher> fpmTch, List<RozkladModels.RozkladTeacher> rzkTch)
 		{
-			var result = new Dictionary<string, List<FpmModels.FpmTeacher>>();
-			var distinctTeachers = rzkTch.Distinct(new SubjectComparer());
+			var result = new Dictionary<RozkladTeacher, List<FpmModels.FpmTeacher>>();
+			var distinctTeachers = rzkTch.Distinct(new TeacherComparer());
 			foreach (var teacher in distinctTeachers)
 			{
-				result.Add(teacher.Name, MapFpmSubjects(teacher.Name.Split(' '), fpmTch));
+				result.Add(teacher, MapFpmTeachers(teacher.Name.Split(' '), fpmTch));
 			}
 			return result;
 		}

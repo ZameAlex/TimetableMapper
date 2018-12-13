@@ -16,13 +16,17 @@ namespace TimeTableUI.Controllers
 		{
 			client = fpmClient;
 		}
+		[HttpGet]
         public IActionResult Index()
         {
-		
-			client.InitRequest().Wait();
-			client.Login(new FpmUser("leo", "leoleo")).Wait();
 			client.GetSubjectsAndGroups().Wait();
             return View(client.Groups);
         }
+
+		[HttpPost]
+		public IActionResult GroupMenu(string id)
+		{
+			return View();
+		}
     }
 }
