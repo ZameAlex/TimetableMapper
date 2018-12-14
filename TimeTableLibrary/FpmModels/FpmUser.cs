@@ -8,6 +8,12 @@ namespace TimeTableLibrary.FpmModels
 	{
 		public string Login { get; protected set; }
 		public string Password { get; protected set; }
+
+		public FpmUser()
+		{
+
+		}
+
 		public FpmUser(string login, string password)
 		{
 			Login = login;

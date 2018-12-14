@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TimeTableLibrary.Client;
 using TimeTableLibrary.FpmModels;
-using TimeTableUI.Models.TimeTableModels.FPM;
 
 namespace TimeTableUI.Controllers
 {
-    public class LoginController : Controller
+	public class LoginController : Controller
     {
 		readonly IFpmClient client;
 		public LoginController(IFpmClient fpmClient)
@@ -23,11 +18,12 @@ namespace TimeTableUI.Controllers
         }
 
 		[HttpPost]
-		public IActionResult Create(User user)
+		public IActionResult Create(FpmUser user)
 		{
 			client.InitRequest();
-			client.Login(new FpmUser(user.Login, user.Password));
-			return RedirectToAction("Index", "Dashboard");
+			client.User = user;
+			client.Login();
+			return RedirectToAction("Index", "Groups");
 		}
     }
 }

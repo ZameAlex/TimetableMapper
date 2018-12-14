@@ -23,6 +23,8 @@ namespace TimeTableLibrary.FpmRequests
 		public List<FpmGroup> Groups { get; set; }
 		public List<FpmSubject> Subjects { get; set; }
 		public List<FpmTeacher> Teachers { get; set; }
+		public FpmGroup CurrentGroup { get; set; }
+		public FpmUser User { get; set; }
 
 		public FpmClient() : base()
 		{
@@ -45,7 +47,7 @@ namespace TimeTableLibrary.FpmRequests
 			headers.Add("Cookie", $"JSESSIONID={sessionId}");
 		}
 
-		public async Task Login(FpmUser user)
+		public async Task Login()
 		{
 			//disable safety certificate
 			ServicePointManager.ServerCertificateValidationCallback =
@@ -64,8 +66,8 @@ namespace TimeTableLibrary.FpmRequests
 			message.Method = HttpMethod.Post;
 			message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
 			{
-				{"login", user.Login },
-				{"password",user.Password }
+				{"login", User.Login },
+				{"password",User.Password }
 			});
 			Encoding.GetEncoding("windows-1251");
 			var response = await client.SendAsync(message);

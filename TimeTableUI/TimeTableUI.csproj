@@ -15,11 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\TimeTableModels\Rozklad\" />
-    <Folder Include="Mapping\" />
+    <Folder Include="Models\TimeTableModels\" />
     <Folder Include="Views\SubjectsGroupsLinking\" />
     <Folder Include="Views\TeachersSubjectsLinking\" />
-    <Folder Include="Views\TeachersMapping\" />
   </ItemGroup>
 
   <ItemGroup>

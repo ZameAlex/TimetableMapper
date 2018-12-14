@@ -26,6 +26,9 @@ namespace TimeTableUI.Controllers
 		[HttpPost]
 		public IActionResult GroupMenu(string id)
 		{
+			var group = client.Groups.Where(g => g.Id == id).First();
+			client.CurrentGroup = group;
+			ViewBag.Name = client.CurrentGroup.Name;
 			return View();
 		}
     }
