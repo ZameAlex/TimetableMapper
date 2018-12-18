@@ -12,7 +12,7 @@ namespace TimeTableLibrary.FpmModels
 		public string Id { get; set; }
 		public override string ToString()
 		{
-			return $"Id:{Id}, Name:{Name}";
+			return $"Name:{Name}";
 		}
 	}
 }

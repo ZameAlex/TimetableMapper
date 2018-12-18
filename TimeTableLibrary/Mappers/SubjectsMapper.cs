@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TimeTableLibrary.FpmModels;
 using TimeTableLibrary.RozkladModels;
+using CsvHelper;
+using System.IO;
 
 namespace TimeTableLibrary.Mappers
 {
@@ -84,6 +86,12 @@ namespace TimeTableLibrary.Mappers
 				result.Add(subject, MapFpmSubjects(subject.Name.Split(' '), subject.Title.Split(' '), fpmElements));
 			}
 			return result;
+		}
+
+		public void WriteNewMapping(Dictionary<RozkladSubject, List<FpmSubject>> values)
+		{
+			CsvWriter writer = new CsvWriter(new StreamWriter("mapingSbj.csv"));
+			
 		}
 
 		public FpmSubject Map(RozkladSubject model)

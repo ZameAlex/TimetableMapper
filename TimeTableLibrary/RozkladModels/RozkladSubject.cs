@@ -13,6 +13,8 @@ namespace TimeTableLibrary.RozkladModels
 
 		public bool Equals(RozkladSubject other)
 		{
+			if (other == null)
+				return false;
 			if (Title == other.Title || Name == other.Name)
 				return true;
 			return false;

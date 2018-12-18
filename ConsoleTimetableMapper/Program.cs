@@ -27,7 +27,8 @@ namespace ConsoleTimetableMapper
 			//var rzkTeachers = result[0].Select(r => r.Teacher).Union(result[1].Select(r => r.Teacher)).ToList();
 			FpmClient fpmClient = new FpmClient();
 			fpmClient.InitRequest().Wait();
-			fpmClient.Login(new TimeTableLibrary.FpmModels.FpmUser("leo","leoleo")).Wait();
+			fpmClient.User = new TimeTableLibrary.FpmModels.FpmUser("leo", "leoleo");
+			fpmClient.Login().Wait();
 			fpmClient.GetSubjectsAndGroups().Wait();
 			fpmClient.GetTeachers().Wait();
 			SubjectsMapper subjectsMapper = new SubjectsMapper();

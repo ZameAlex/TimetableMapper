@@ -16,6 +16,7 @@ namespace TimeTableLibrary.RozkladRequests
 		private const string FIRST_WEEK = "ctl00_MainContent_FirstScheduleTable";
 		private const string SECOND_WEEK = "ctl00_MainContent_SecondScheduleTable";
 		private readonly string group;
+		public List<RozkladLesson>[] rozkladTimeTable {get;set;}
 		public RozkladClient(string group)
 		{
 			this.group = group;
@@ -74,6 +75,7 @@ namespace TimeTableLibrary.RozkladRequests
 			var result = new List<RozkladLesson>[2];
 			result[0] = ParseTable(document.DocumentNode.SelectSingleNode($@"//table[@id='{FIRST_WEEK}']"), true);
 			result[1] = ParseTable(document.DocumentNode.SelectSingleNode($@"//table[@id='{SECOND_WEEK}']"), false);
+			rozkladTimeTable = result;
 			return result;
 		}
 
