@@ -57,6 +57,7 @@ namespace SimpleUI
 
 			SubjectsMapper mapper = new SubjectsMapper();
 			mappedSubj = mapper.Map(fpmClient.Subjects, rzkSubjects.ToList());
+			mapper.WriteNewMapping(mappedSubj);
 			SelectCurrent();
 		}
 	}

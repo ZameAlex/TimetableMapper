@@ -91,7 +91,15 @@ namespace TimeTableLibrary.Mappers
 		public void WriteNewMapping(Dictionary<RozkladSubject, List<FpmSubject>> values)
 		{
 			CsvWriter writer = new CsvWriter(new StreamWriter("mapingSbj.csv"));
-			
+			foreach (var item in values)
+			{
+				foreach (var value in item.Value)
+				{
+					writer.WriteRecord(new { Rozklad = item.Key.Title, Fpm = value });
+					writer.NextRecord();
+				}
+			}
+			writer.Dispose();
 		}
 
 		public FpmSubject Map(RozkladSubject model)
