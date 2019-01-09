@@ -29,13 +29,13 @@ namespace TimeTableLibrary.RozkladModels
 
 		public override string ToString()
 		{
-			return $"Name: {Name}";
+			return Name;
 		}
 
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
+			if (ReferenceEquals(null, obj as RozkladTeacher)) return false;
+			if (ReferenceEquals(this, obj as RozkladTeacher)) return true;
 			return Equals(obj as RozkladTeacher);
 		}
 

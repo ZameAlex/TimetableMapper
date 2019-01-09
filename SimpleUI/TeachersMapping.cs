@@ -35,6 +35,10 @@ namespace SimpleUI
 		private void Map_Click(object sender, EventArgs e)
 		{
 			mappedTeachers.Add(rozkladTeachers.Text, fpmClient.Teachers.Where(s => s.Name == fpmTeachers.Text).FirstOrDefault().Id);
+			if (rozkladTeachers.Items.Count == 1)
+				this.Close();
+			rozkladTeachers.Items.Remove(rozkladTeachers.SelectedItem);
+			fpmTeachers.Text = "";
 		}
 
 		private void SubjectsMapping_Load(object sender, EventArgs e)

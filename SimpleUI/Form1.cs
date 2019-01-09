@@ -28,7 +28,7 @@ namespace SimpleUI
 			MapTeachers.Enabled = false;
 			MapTimetable.Enabled = false;
 			fpmClient = new FpmClient();
-			checker = new TimeTableLibrary.CsvHelpers.CsvChecker(fpmClient, rozkladClient);
+			
 			
 		}
 
@@ -77,6 +77,7 @@ namespace SimpleUI
 				fpmClient.CurrentGroup = group;
 				rozkladClient = new RozkladClient(group.Name);
 				GetTimeTable();
+				checker = new TimeTableLibrary.CsvHelpers.CsvChecker(fpmClient, rozkladClient);
 				MapSubjects.Enabled = true;
 				MapTeachers.Enabled = true;
 			}

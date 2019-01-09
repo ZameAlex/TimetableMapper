@@ -35,6 +35,10 @@ namespace SimpleUI
 		private void Map_Click(object sender, EventArgs e)
 		{
 			mappedSubjects.Add(rozkladSubjects.Text, fpmClient.Subjects.Where(s => s.Name == fpmSubjects.Text).FirstOrDefault().Id);
+			if (rozkladSubjects.Items.Count == 1)
+				this.Close();
+			rozkladSubjects.Items.Remove(rozkladSubjects.SelectedItem);
+			fpmSubjects.Text = "";
 		}
 
 		private void SubjectsMapping_Load(object sender, EventArgs e)
