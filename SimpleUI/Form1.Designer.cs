@@ -75,6 +75,7 @@
 			this.MapTimetable.TabIndex = 3;
 			this.MapTimetable.Text = "Map timetable";
 			this.MapTimetable.UseVisualStyleBackColor = true;
+			this.MapTimetable.Click += new System.EventHandler(this.MapTimetable_Click);
 			// 
 			// Select
 			// 

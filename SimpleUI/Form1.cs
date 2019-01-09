@@ -83,6 +83,9 @@ namespace SimpleUI
 			}
 		}
 
-		
+		private void MapTimetable_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
