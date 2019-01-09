@@ -20,6 +20,7 @@ namespace SimpleUI
 	{
 		FpmClient fpmClient;
 		RozkladClient rozkladClient;
+		TimeTableLibrary.CsvHelpers.CsvChecker checker;
 		public Form1()
 		{
 			InitializeComponent();
@@ -27,6 +28,7 @@ namespace SimpleUI
 			MapTeachers.Enabled = false;
 			MapTimetable.Enabled = false;
 			fpmClient = new FpmClient();
+			checker = new TimeTableLibrary.CsvHelpers.CsvChecker(fpmClient, rozkladClient);
 			
 		}
 
@@ -44,6 +46,7 @@ namespace SimpleUI
 		{
 			
 		}
+
 		private async void GetTimeTable()
 		{
 			await rozkladClient.GetTimetable();
@@ -52,7 +55,18 @@ namespace SimpleUI
 		private void MapSubjects_Click(object sender, EventArgs e)
 		{
 			SubjectsMapping subjectsMapping = new SubjectsMapping(fpmClient, rozkladClient);
-			subjectsMapping.Show();
+			subjectsMapping.ShowDialog();
+			if (checker.IsSubjectMapped() && checker.IsTeacherMapped())
+				MapTimetable.Enabled = true;
+
+		}
+
+		private void MapTeachers_Click(object sender, EventArgs e)
+		{
+			TeachersMapping teachersMapping = new TeachersMapping(fpmClient, rozkladClient);
+			teachersMapping.ShowDialog();
+			if (checker.IsSubjectMapped() && checker.IsTeacherMapped())
+				MapTimetable.Enabled = true;
 		}
 
 		private void Select_Click(object sender, EventArgs e)
@@ -67,5 +81,7 @@ namespace SimpleUI
 				MapTeachers.Enabled = true;
 			}
 		}
+
+		
 	}
 }

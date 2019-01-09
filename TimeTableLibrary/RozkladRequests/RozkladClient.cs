@@ -17,6 +17,9 @@ namespace TimeTableLibrary.RozkladRequests
 		private const string SECOND_WEEK = "ctl00_MainContent_SecondScheduleTable";
 		private readonly string group;
 		public List<RozkladLesson>[] rozkladTimeTable {get;set;}
+		public List<RozkladSubject> Subjects { get; set; }
+		public List<RozkladTeacher> Teachers { get; set; }
+
 		public RozkladClient(string group)
 		{
 			this.group = group;
@@ -24,6 +27,8 @@ namespace TimeTableLibrary.RozkladRequests
 			message = new HttpRequestMessage();
 			Timetable = new Dictionary<string, string>();
 			headers = new Dictionary<string, string>();
+			Teachers = new List<RozkladTeacher>();
+			Subjects = new List<RozkladSubject>();
 			//headers initialization
 			headers.Add("Host", "rozklad.kpi.ua");
 			headers.Add("Connection", "keep-alive");
@@ -75,6 +80,20 @@ namespace TimeTableLibrary.RozkladRequests
 			var result = new List<RozkladLesson>[2];
 			result[0] = ParseTable(document.DocumentNode.SelectSingleNode($@"//table[@id='{FIRST_WEEK}']"), true);
 			result[1] = ParseTable(document.DocumentNode.SelectSingleNode($@"//table[@id='{SECOND_WEEK}']"), false);
+			foreach(var item in result[0])
+			{
+				if (!Teachers.Exists(t => t.Name == item.Teacher.Name))
+					Teachers.Add(item.Teacher);
+				if (!Subjects.Exists(t => t.Name == item.Subject.Title))
+					Subjects.Add(item.Subject);
+			}
+			foreach (var item in result[1])
+			{
+				if (!Teachers.Exists(t => t.Name == item.Teacher.Name))
+					Teachers.Add(item.Teacher);
+				if (!Subjects.Exists(t => t.Name == item.Subject.Title))
+					Subjects.Add(item.Subject);
+			}
 			rozkladTimeTable = result;
 			return result;
 		}

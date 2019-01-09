@@ -19,9 +19,7 @@ namespace SimpleUI
 	{
 		FpmClient fpmClient;
 		RozkladClient rozkladClient;
-		RozkladSubject[] rzkSubjects;
-		Dictionary<RozkladSubject, List<FpmSubject>> mappedSubj;
-		int number = 0;
+		Dictionary<string, string> mappedSubjects;
 		public SubjectsMapping()
 		{
 			InitializeComponent();
@@ -31,34 +29,27 @@ namespace SimpleUI
 		{
 			this.fpmClient = fpmClient;
 			this.rozkladClient = rozkladClient;
-		}
-
-		private void SelectCurrent()
-		{
-			//fpmSubjects.Items.Clear();
-			var currentObj = mappedSubj.Keys.ElementAt(number);
-			rozkladSubject.Items.Add(currentObj);
-			rozkladSubject.SelectedItem = rozkladSubject.Items[number];
-			fpmSubjects.Items.AddRange(mappedSubj[currentObj].ToArray());
+			mappedSubjects = new Dictionary<string, string>();
 		}
 
 		private void Map_Click(object sender, EventArgs e)
 		{
-			number++;
-			if (number < mappedSubj.Count())
-				SelectCurrent();
+			mappedSubjects.Add(rozkladSubjects.Text, fpmClient.Subjects.Where(s => s.Name == fpmSubjects.Text).FirstOrDefault().Id);
 		}
 
 		private void SubjectsMapping_Load(object sender, EventArgs e)
 		{
-			rozkladSubject.Enabled = false;
-			rzkSubjects = rozkladClient.rozkladTimeTable[0].Select(r => r.Subject).Union(rozkladClient.rozkladTimeTable[1].Select(r => r.Subject)).Distinct().ToArray();
-			//rozkladSubject.Items.AddRange(rzkSubjects);
+			fpmSubjects.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+			fpmSubjects.AutoCompleteCustomSource = new AutoCompleteStringCollection();
+			fpmSubjects.AutoCompleteCustomSource.AddRange(fpmClient.Subjects.Select(s => s.Name).ToArray());
+			fpmSubjects.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			rozkladSubjects.Items.AddRange(rozkladClient.Subjects.ToArray());
+		}
 
-			SubjectsMapper mapper = new SubjectsMapper();
-			mappedSubj = mapper.Map(fpmClient.Subjects, rzkSubjects.ToList());
-			mapper.WriteNewMapping(mappedSubj);
-			SelectCurrent();
+		private void SubjectsMapping_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			TimeTableLibrary.CsvHelpers.CsvWriter writer = new TimeTableLibrary.CsvHelpers.CsvWriter("subjects.csv");
+			writer.Write(mappedSubjects);
 		}
 	}
 }

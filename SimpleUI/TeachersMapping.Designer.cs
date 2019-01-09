@@ -1,6 +1,6 @@
 ﻿namespace SimpleUI
 {
-	partial class SubjectsMapping
+	partial class TeachersMapping
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,18 +28,18 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.rozkladSubjects = new System.Windows.Forms.ComboBox();
+			this.rozkladTeachers = new System.Windows.Forms.ComboBox();
 			this.Map = new System.Windows.Forms.Button();
-			this.fpmSubjects = new System.Windows.Forms.TextBox();
+			this.fpmTeachers = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// rozkladSubject
 			// 
-			this.rozkladSubjects.FormattingEnabled = true;
-			this.rozkladSubjects.Location = new System.Drawing.Point(49, 12);
-			this.rozkladSubjects.Name = "rozkladSubject";
-			this.rozkladSubjects.Size = new System.Drawing.Size(266, 21);
-			this.rozkladSubjects.TabIndex = 1;
+			this.rozkladTeachers.FormattingEnabled = true;
+			this.rozkladTeachers.Location = new System.Drawing.Point(49, 12);
+			this.rozkladTeachers.Name = "rozkladSubject";
+			this.rozkladTeachers.Size = new System.Drawing.Size(266, 21);
+			this.rozkladTeachers.TabIndex = 1;
 			// 
 			// Map
 			// 
@@ -53,19 +53,19 @@
 			// 
 			// fpmSubject
 			// 
-			this.fpmSubjects.Location = new System.Drawing.Point(49, 57);
-			this.fpmSubjects.Name = "fpmSubject";
-			this.fpmSubjects.Size = new System.Drawing.Size(266, 20);
-			this.fpmSubjects.TabIndex = 3;
+			this.fpmTeachers.Location = new System.Drawing.Point(49, 57);
+			this.fpmTeachers.Name = "fpmSubject";
+			this.fpmTeachers.Size = new System.Drawing.Size(266, 20);
+			this.fpmTeachers.TabIndex = 3;
 			// 
 			// SubjectsMapping
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(327, 167);
-			this.Controls.Add(this.fpmSubjects);
+			this.Controls.Add(this.fpmTeachers);
 			this.Controls.Add(this.Map);
-			this.Controls.Add(this.rozkladSubjects);
+			this.Controls.Add(this.rozkladTeachers);
 			this.Name = "SubjectsMapping";
 			this.Text = "SubjectsMapping";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SubjectsMapping_FormClosing);
@@ -76,8 +76,8 @@
 		}
 
 		#endregion
-		private System.Windows.Forms.ComboBox rozkladSubjects;
+		private System.Windows.Forms.ComboBox rozkladTeachers;
 		private System.Windows.Forms.Button Map;
-		private System.Windows.Forms.TextBox fpmSubjects;
+		private System.Windows.Forms.TextBox fpmTeachers;
 	}
 }

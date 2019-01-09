@@ -65,6 +65,7 @@
 			this.MapTeachers.TabIndex = 2;
 			this.MapTeachers.Text = "Map teachers";
 			this.MapTeachers.UseVisualStyleBackColor = true;
+			this.MapTeachers.Click += new System.EventHandler(this.MapTeachers_Click);
 			// 
 			// MapTimetable
 			// 

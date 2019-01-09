@@ -32,7 +32,7 @@ namespace TimeTableLibrary.RozkladModels
 
 		public override string ToString()
 		{
-			return $"Name: {Name}";
+			return Title;
 		}
 
 		public override bool Equals(object obj)
