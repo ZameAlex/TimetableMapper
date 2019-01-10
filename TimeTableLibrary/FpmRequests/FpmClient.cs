@@ -10,10 +10,11 @@ using HtmlAgilityPack;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
+using TimeTableLibrary.RozkladModels;
 
 namespace TimeTableLibrary.FpmRequests
 {
-	public class FpmClient : AbstractClient, IFpmClient
+	public class FpmClient : AbstractClient//, IFpmClient
 	{
 		private string sessionId;
 		private FpmUser currentUser;
@@ -110,6 +111,136 @@ namespace TimeTableLibrary.FpmRequests
 			Subjects = FormParsing(document.DocumentNode.SelectSingleNode($"//form[@name='{SUBJECTS_TEACHERS_FORM_NAME}']"));
 		}
 
+		#region PostRequest
+		public async Task ClearRequest()
+		{
+			message = new HttpRequestMessage(HttpMethod.Post, new Uri("http://fpm.kpi.ua/scheduler/group.do"));
+			SetHeaders(message);
+			message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+			{
+				{"type", "group" },
+				{"id",CurrentGroup.Id }
+			});
+			var response2 = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
+			message = new HttpRequestMessage(HttpMethod.Get, new Uri("http://fpm.kpi.ua/scheduler/edit.do?id="+CurrentGroup.Id));
+			SetHeaders(message);
+			var response1 = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
+			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/savescheduler");
+			List<KeyValuePair<string, string>> ids = new List<KeyValuePair<string, string>>();
+			for (int j = 0; j < 6; j++)
+			{
+				for (int k = 0; k < 6; k++)
+				{
+					for (int i = 1; i < 3; i++)
+					{
+						ids.Add(new KeyValuePair<string, string>($"subject_{i}_{j}_{k}", ""));
+						ids.Add(new KeyValuePair<string, string>($"room_{i}_{j}_{k}", ""));
+					}
+				}
+			}
+			message.Content = new FormUrlEncodedContent(ids);
+			SetHeaders(message);
+			message.Headers.Add("Referer", $"http://fpm.kpi.ua/scheduler/edit.do?id="+CurrentGroup.Id);
+			Encoding.GetEncoding("windows-1251");
+			var response = await client.SendAsync(message);
+		}
+
+		public async Task SetRequest(List<ResultLesson> lessons, CsvHelpers.CsvChecker checker)
+		{
+			message = new HttpRequestMessage(HttpMethod.Post, new Uri("http://fpm.kpi.ua/scheduler/group.do"));
+			SetHeaders(message);
+			message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+			{
+				{"type", "group" },
+				{"id",CurrentGroup.Id }
+			});
+			var response2 = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
+			message = new HttpRequestMessage(HttpMethod.Get, new Uri("http://fpm.kpi.ua/scheduler/edit.do?id=" + CurrentGroup.Id));
+			SetHeaders(message);
+			var response1 = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
+			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/savescheduler");
+			SetHeaders(message);
+			List<KeyValuePair<string, string>> ids = new List<KeyValuePair<string, string>>();
+			//for (int j = 0; j < 6; j++)
+			//{
+			//	for (int k = 0; k < 6; k++)
+			//	{
+			//		for (int i = 1; i < 3; i++)
+			//		{
+			//			ids.Add(new KeyValuePair<string, string>($"subject_{i}_{j}_{k}", ""));
+			//			ids.Add(new KeyValuePair<string, string>($"room_{i}_{j}_{k}", ""));
+			//		}
+			//	}
+			//}
+			foreach (var item in lessons)
+			{
+				//for (int j = 0; j < (int)item.LessonNumber-1; j++)
+				//{
+				//	for (int k = 0; k <= (int)item.DayOfWeek; k++)
+				//	{
+				//		for (int i = 1; i < 3; i++)
+				//		{
+				//		if()
+				//			ids.Add(new KeyValuePair<string, string>($"subject_{i}_{j}_{k}", ""));
+				//			ids.Add(new KeyValuePair<string, string>($"room_{i}_{j}_{k}", ""));
+				//		}
+				//	}
+				//}
+				if (item.Flasher)
+				{
+					if(item.FirstWeekLesson!=null)
+					{
+						ids.Add(GetLesson(true, checker, item));
+						ids.Add(GetTeacher(true, checker, item));
+						ids.Add(GetRoom(true, checker, item));
+					}
+					ids.Add(new KeyValuePair<string, string>($"week_{(int)item.LessonNumber - 1}_{(int)item.DayOfWeek}", "on"));
+					if(item.SecondWeekLesson!=null)
+					{
+						ids.Add(GetLesson(false, checker, item));
+						ids.Add(GetTeacher(false, checker, item));
+						ids.Add(GetRoom(false, checker, item));
+					}
+				}
+				else if(item.FirstWeekLesson==item.SecondWeekLesson && item.FirstWeekLesson != null)
+				{
+						ids.Add(GetLesson(true, checker, item));
+						ids.Add(GetTeacher(true, checker, item));
+						ids.Add(GetRoom(true, checker, item));
+				}
+			}
+			Encoding.GetEncoding("windows-1251");
+			message.Content = new FormUrlEncodedContent(ids);
+			var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
+		}
+		#endregion PostRequest
+
+		#region HelperMethods
+
+		public KeyValuePair<string, string> GetLesson(bool first, CsvHelpers.CsvChecker checker, ResultLesson lesson)
+		{
+			if (first)
+				return new KeyValuePair<string, string>($"subject_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t.Title == lesson.FirstWeekLesson.Subject.Title)].Id);
+			else
+				return new KeyValuePair<string, string>($"subject_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t.Title == lesson.SecondWeekLesson.Subject.Title)].Id);
+		}
+
+		public KeyValuePair<string, string> GetRoom(bool first, CsvHelpers.CsvChecker checker, ResultLesson lesson)
+		{
+			if (first)
+				return new KeyValuePair<string, string>($"room_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", lesson.FirstWeekLesson.LessonTypeAndRoom);
+			else
+				return new KeyValuePair<string, string>($"room_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", lesson.SecondWeekLesson.LessonTypeAndRoom);
+		}
+
+		public KeyValuePair<string, string> GetTeacher(bool first, CsvHelpers.CsvChecker checker, ResultLesson lesson)
+		{
+			if (first)
+				return new KeyValuePair<string, string>($"teacher_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Teachers[checker.Teachers.Keys.Single(t => t.Name == lesson.FirstWeekLesson.Teacher.Name)].Id);
+			else
+				return new KeyValuePair<string, string>($"teacher_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Teachers[checker.Teachers.Keys.Single(t => t.Name == lesson.SecondWeekLesson.Teacher.Name)].Id);
+		}
+
 		public async Task SetSubjectsToGroup(FpmGroup group, List<FpmSubject> subjects)
 		{
 			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/groups/dependence/save_subjects.do");
@@ -127,7 +258,6 @@ namespace TimeTableLibrary.FpmRequests
 			var response = await client.SendAsync(message);
 		}
 
-		#region HelperMethods
 		private List<FpmSubject> FormParsing(HtmlNode form)
 		{
 			var result = new List<FpmSubject>();
@@ -147,9 +277,21 @@ namespace TimeTableLibrary.FpmRequests
 			return result;
 		}
 
-		public Task SetTeacherToSubject(FpmTeacher teacher, FpmSubject subject)
+		public async Task SetTeacherToSubjectAsync(FpmTeacher teacher, List<FpmSubject> subjects)
 		{
-			throw new NotImplementedException();
+			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/teachers/dependence/save_subjects.do");
+			SetHeaders(message);
+			List<KeyValuePair<string, string>> ids = new List<KeyValuePair<string, string>>()
+			{
+				new KeyValuePair<string, string>("teacher_id",teacher.Id)
+			};
+			foreach (var item in subjects)
+			{
+				if (item != null)
+					ids.Add(new KeyValuePair<string, string>("ids", item.Id));
+			}
+			message.Content = new FormUrlEncodedContent(ids);
+			var response = await client.SendAsync(message);
 		}
 		#endregion HelperMethods
 	}

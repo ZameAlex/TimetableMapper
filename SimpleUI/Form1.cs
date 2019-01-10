@@ -13,6 +13,7 @@ using TimeTableLibrary.RozkladRequests;
 using TimeTableLibrary.Enums;
 using TimeTableLibrary.FpmModels;
 using TimeTableLibrary.RozkladModels;
+using TimeTableLibrary.Mappers;
 
 namespace SimpleUI
 {
@@ -80,12 +81,15 @@ namespace SimpleUI
 				checker = new TimeTableLibrary.CsvHelpers.CsvChecker(fpmClient, rozkladClient);
 				MapSubjects.Enabled = true;
 				MapTeachers.Enabled = true;
+				if (checker.IsSubjectMapped() && checker.IsTeacherMapped())
+				MapTimetable.Enabled = true;
 			}
 		}
 
-		private void MapTimetable_Click(object sender, EventArgs e)
+		private async void MapTimetable_Click(object sender, EventArgs e)
 		{
-
+			await fpmClient.ClearRequest();
+			await fpmClient.SetRequest(new ResultLessonsMapper().Map(rozkladClient.rozkladTimeTable[0], rozkladClient.rozkladTimeTable[1]), checker);
 		}
 	}
 }

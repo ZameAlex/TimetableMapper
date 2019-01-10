@@ -17,7 +17,7 @@ namespace TimeTableLibrary.Client
 		Task GetTeachers();
 		Task GetSubjectsAndGroups();
 		Task SetSubjectsToGroup(FpmGroup group, List<FpmSubject> subjects);
-		Task SetTeacherToSubject(FpmTeacher teacher, FpmSubject subject);
+		Task SetTeacherToSubject(FpmTeacher teacher, List<FpmSubject> subjects);
 		Task InitRequest();
 		//Task SetScheduler()
 

@@ -18,7 +18,7 @@ namespace TimeTableLibrary.Client
 		{
 			client = new HttpClient(new HttpClientHandler()
 			{
-				UseCookies = false,
+				UseCookies = true,
 				ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; },
 			});
 			message = new HttpRequestMessage();
