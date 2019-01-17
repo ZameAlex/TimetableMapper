@@ -33,7 +33,7 @@
 			this.MapSubjects = new System.Windows.Forms.Button();
 			this.MapTeachers = new System.Windows.Forms.Button();
 			this.MapTimetable = new System.Windows.Forms.Button();
-			this.Select = new System.Windows.Forms.Button();
+			this.Selecting = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// textBox1
@@ -79,20 +79,20 @@
 			// 
 			// Select
 			// 
-			this.Select.Location = new System.Drawing.Point(442, 55);
-			this.Select.Name = "Select";
-			this.Select.Size = new System.Drawing.Size(75, 23);
-			this.Select.TabIndex = 4;
-			this.Select.Text = "Select";
-			this.Select.UseVisualStyleBackColor = true;
-			this.Select.Click += new System.EventHandler(this.Select_Click);
+			this.Selecting.Location = new System.Drawing.Point(442, 55);
+			this.Selecting.Name = "Select";
+			this.Selecting.Size = new System.Drawing.Size(75, 23);
+			this.Selecting.TabIndex = 4;
+			this.Selecting.Text = "Select";
+			this.Selecting.UseVisualStyleBackColor = true;
+			this.Selecting.Click += new System.EventHandler(this.Select_Click);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
-			this.Controls.Add(this.Select);
+			this.Controls.Add(this.Selecting);
 			this.Controls.Add(this.MapTimetable);
 			this.Controls.Add(this.MapTeachers);
 			this.Controls.Add(this.MapSubjects);
@@ -112,7 +112,7 @@
 		private System.Windows.Forms.Button MapSubjects;
 		private System.Windows.Forms.Button MapTeachers;
 		private System.Windows.Forms.Button MapTimetable;
-		private System.Windows.Forms.Button Select;
+		private System.Windows.Forms.Button Selecting;
 	}
 }
 

@@ -8,6 +8,8 @@ using HtmlAgilityPack;
 using TimeTableLibrary.Client;
 using TimeTableLibrary.RozkladModels;
 using TimeTableLibrary.Enums;
+using ConsoleTimetableMapper;
+using System.Diagnostics;
 
 namespace TimeTableLibrary.RozkladRequests
 {
@@ -20,8 +22,11 @@ namespace TimeTableLibrary.RozkladRequests
 		public List<RozkladSubject> Subjects { get; set; }
 		public List<RozkladTeacher> Teachers { get; set; }
 
+		#region GetRequests
 		public RozkladClient(string group)
 		{
+			var observer = new ExampleDiagnosticObserver();
+			IDisposable subscription = DiagnosticListener.AllListeners.Subscribe(observer);
 			this.group = group;
 			client = new HttpClient(new HttpClientHandler() { UseCookies = false });
 			message = new HttpRequestMessage();
@@ -97,9 +102,7 @@ namespace TimeTableLibrary.RozkladRequests
 			rozkladTimeTable = result;
 			return result;
 		}
-
-
-
+		#endregion GetRequests
 
 		#region HelperMethods
 		private List<RozkladLesson> ParseTable(HtmlNode table, bool firstWeek)

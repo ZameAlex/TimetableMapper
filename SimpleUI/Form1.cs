@@ -38,8 +38,8 @@ namespace SimpleUI
 			await fpmClient.InitRequest();
 			fpmClient.User = new FpmUser("leo", "leoleo");
 			await fpmClient.Login();
-			await fpmClient.GetSubjectsAndGroups();
-			await fpmClient.GetTeachers();
+			await fpmClient.SelectSubjectsAndGroups();
+			await fpmClient.SelectTeachers();
 			textBox1.AutoCompleteCustomSource.AddRange(fpmClient.Groups.Select(g=>g.Name).ToArray());
 		}
 
