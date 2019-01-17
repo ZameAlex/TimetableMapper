@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 namespace TimeTableLibrary.RozkladRequests
 {
-	public class RozkladClient : AbstractClient, IRozkladClient
+	public class RozkladClient : AbstractClient
 	{
 		private const string FIRST_WEEK = "ctl00_MainContent_FirstScheduleTable";
 		private const string SECOND_WEEK = "ctl00_MainContent_SecondScheduleTable";

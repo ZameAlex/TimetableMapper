@@ -39,7 +39,7 @@ namespace TimeTableUI
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			
 			//services.AddSingleton<IFpmClient, FpmClient>();
-			services.AddSingleton<IRozkladClient, RozkladClient>();
+			//services.AddSingleton<IRozkladClient, RozkladClient>();
 
 			//services.AddTransient<IElementsMapper<RozkladTeacher, FpmTeacher>,TeachersMapper>();
 			//services.AddTransient<IElementsMapper<RozkladSubject, FpmSubject>, SubjectsMapper>();

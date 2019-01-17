@@ -6,24 +6,24 @@ namespace TimeTableUI.Controllers
 {
 	public class LoginController : Controller
     {
-		readonly IFpmClient client;
-		public LoginController(IFpmClient fpmClient)
-		{
-			client = fpmClient;
-		}
-		[HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
+		//readonly IFpmClient client;
+		//public LoginController(IFpmClient fpmClient)
+		//{
+		//	client = fpmClient;
+		//}
+		//[HttpGet]
+  //      public IActionResult Index()
+  //      {
+  //          return View();
+  //      }
 
-		[HttpPost]
-		public IActionResult Create(FpmUser user)
-		{
-			client.InitRequest();
-			client.User = user;
-			client.Login();
-			return RedirectToAction("Index", "Groups");
-		}
+		//[HttpPost]
+		//public IActionResult Create(FpmUser user)
+		//{
+		//	client.InitRequest();
+		//	client.User = user;
+		//	client.Login();
+		//	return RedirectToAction("Index", "Groups");
+		//}
     }
 }
