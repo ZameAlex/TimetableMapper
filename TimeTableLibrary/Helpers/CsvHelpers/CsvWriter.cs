@@ -16,7 +16,7 @@ namespace TimeTableLibrary.CsvHelpers
 
 		public void Write(Dictionary<string,string> dictionary)
 		{
-			StreamWriter writer = new StreamWriter(fileName);
+			StreamWriter writer = new StreamWriter(Path.Combine(Path.GetTempPath(),fileName));
 			CsvHelper.CsvWriter csvWriter = new CsvHelper.CsvWriter(writer);
 			csvWriter.WriteRecords<KeyValuePair<string, string>>(dictionary);
 			writer.Close();

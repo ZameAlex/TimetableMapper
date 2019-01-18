@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using CsvHelper;
+using Octokit;
 
 namespace TimeTableLibrary.CsvHelpers
 {
@@ -13,6 +15,11 @@ namespace TimeTableLibrary.CsvHelpers
 		public CsvReader(string fileName)
 		{
 			this.fileName = fileName;
+			var github = new GitHubClient(new ProductHeaderValue("TimeTableMapper"));
+			var userName = "ZameAlex";
+			var repository = github.Repository.GetAllForUser(userName).Result.Single(r=>r.Name=="TimetableMapper");
+			RepositoryContentsClient contentsClient = new RepositoryContentsClient(new ApiConnection(github.Connection));
+			var content = contentsClient.GetAllContents(userName, repository.Name,fileName).Result.First();
 		}
 
 		public Dictionary<string, string> Read()
