@@ -52,7 +52,7 @@ namespace SimpleUI
 
 		private void SubjectsMapping_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			TimeTableLibrary.CsvHelpers.CsvWriter writer = new TimeTableLibrary.CsvHelpers.CsvWriter("teachers.csv");
+			TimeTableLibrary.CsvHelpers.GitWriter writer = new TimeTableLibrary.CsvHelpers.GitWriter("teachers.csv");
 			writer.Write(mappedTeachers);
 		}
 	}

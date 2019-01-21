@@ -25,7 +25,7 @@ namespace TimeTableLibrary.CsvHelpers
 
 		public bool IsTeacherMapped()
 		{
-			var dictionary = new CsvReader("teachers.csv").Read();
+			var dictionary = new GitReader("teachers.csv").Read();
 			foreach(var item in rozkladClient.Teachers)
 			{
 				if (!dictionary.ContainsKey(item.Name))
@@ -41,7 +41,7 @@ namespace TimeTableLibrary.CsvHelpers
 
 		public bool IsSubjectMapped()
 		{
-			var dictionary = new CsvReader("subjects.csv").Read();
+			var dictionary = new GitReader("subjects.csv").Read();
 			foreach (var item in rozkladClient.Subjects)
 			{
 				if (!dictionary.ContainsKey(item.Title))
