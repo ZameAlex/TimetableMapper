@@ -31,18 +31,19 @@ namespace TimeTableLibrary.CsvHelpers
 		public Dictionary<string,string> ParseSharedMapping()
 		{
 			var fileContent = DownloadCsv();
-			var keyValue = fileContent.Split(',','\n');
-			var result = new Dictionary<string, string>();
-			for (int str = 0; str < keyValue.Length-1; str += 2)
-			{
-				result.Add(keyValue[str], keyValue[str + 1]);
-			}
+			MemoryStream stream = new MemoryStream();
+			StreamWriter writer = new StreamWriter(stream);
+			writer.Write(fileContent);
+			writer.Flush();
+			stream.Position = 0;
+			var result = Read(stream);
+
 			return result;
 		}
 
-		public Dictionary<string, string> Read()
+		private Dictionary<string, string> Read(MemoryStream stream)
 		{
-			StreamReader reader = new StreamReader(fileName);
+			StreamReader reader = new StreamReader(stream);
 			CsvHelper.CsvReader csvReader = new CsvHelper.CsvReader(reader);
 			var result = new Dictionary<string, string>();
 			var anonymousTypeDefinition = new
@@ -51,9 +52,10 @@ namespace TimeTableLibrary.CsvHelpers
 				Value = string.Empty
 			};
 			var r = csvReader.GetRecords(anonymousTypeDefinition);
-			foreach(var item in r)
+			foreach (var item in r)
 			{
-				result.Add(item.Key, item.Value);
+				if (item.Key.ToLower() != "key" && item.Value.ToLower() != "value")
+					result.Add(item.Key, item.Value);
 			}
 			reader.Close();
 			return result;
