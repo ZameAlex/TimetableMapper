@@ -6,7 +6,7 @@ using System.Text;
 using CsvHelper;
 using Octokit;
 
-namespace TimeTableLibrary.CsvHelpers
+namespace TimeTableLibrary.GitHelpers
 {
 	public class GitReader
 	{

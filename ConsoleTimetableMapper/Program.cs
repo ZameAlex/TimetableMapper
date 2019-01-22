@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using TimeTableLibrary.CsvHelpers;
+using TimeTableLibrary.GitHelpers;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.Mappers;
 using TimeTableLibrary.RozkladRequests;
@@ -23,7 +23,7 @@ namespace ConsoleTimetableMapper
 			var rzkSubjects = rozkladLessons[0].Select(r => r.Subject).Union(rozkladLessons[1].Select(r => r.Subject)).ToList();
 			FpmClient fpmClient = new FpmClient();
 			fpmClient.InitRequest().Wait(); 
-			fpmClient.User = new TimeTableLibrary.FpmModels.FpmUser("leo", "leoleo");
+			fpmClient.User = new TimeTableLibrary.FpmModels.FpmUser("leo", "leo");
 			fpmClient.Login().Wait();
 			fpmClient.SelectSubjectsAndGroups().Wait();
 			fpmClient.SelectTeachers().Wait();

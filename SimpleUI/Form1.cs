@@ -21,7 +21,7 @@ namespace SimpleUI
 	{
 		FpmClient fpmClient;
 		RozkladClient rozkladClient;
-		TimeTableLibrary.CsvHelpers.CsvChecker checker;
+		TimeTableLibrary.GitHelpers.GitChecker checker;
 		public Form1()
 		{
 			InitializeComponent();
@@ -76,7 +76,7 @@ namespace SimpleUI
 				fpmClient.CurrentGroup = group;
 				rozkladClient = new RozkladClient(group.Name);
 				GetTimeTable();
-				checker = new TimeTableLibrary.CsvHelpers.CsvChecker(fpmClient, rozkladClient);
+				checker = new TimeTableLibrary.GitHelpers.GitChecker(fpmClient, rozkladClient);
 				MapSubjects.Enabled = true;
 				MapTeachers.Enabled = true;
 				EnablingChanges();

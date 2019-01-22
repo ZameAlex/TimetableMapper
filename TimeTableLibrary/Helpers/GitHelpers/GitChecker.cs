@@ -5,9 +5,9 @@ using System.Text;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.RozkladRequests;
 
-namespace TimeTableLibrary.CsvHelpers
+namespace TimeTableLibrary.GitHelpers
 {
-	public class CsvChecker
+	public class GitChecker
 	{
 		public Dictionary<RozkladModels.RozkladSubject,FpmModels.FpmSubject> Subjects { get; set; }
 		public Dictionary<RozkladModels.RozkladTeacher,FpmModels.FpmTeacher> Teachers { get; set; }
@@ -15,7 +15,7 @@ namespace TimeTableLibrary.CsvHelpers
 		FpmClient fpmClient;
 		RozkladClient rozkladClient;
 
-		public CsvChecker(FpmClient fpmClient, RozkladClient rozkladClient)
+		public GitChecker(FpmClient fpmClient, RozkladClient rozkladClient)
 		{
 			this.fpmClient = fpmClient;
 			this.rozkladClient = rozkladClient;

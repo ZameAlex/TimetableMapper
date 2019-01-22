@@ -1,0 +1,29 @@
+﻿@using TimeTableLibrary.FpmModels;
+@model FpmUser
+
+@{
+	ViewData["Title"] = "FpmAuthorization";
+}
+<div class="center-block col-lg-3" style="float: none; margin-top : 10px">
+	<form asp-action="Index" asp-controller="Home" method="post">
+		<div>
+			<label asp-for="Login" />
+			<input type="text" asp-for="Login" />
+		</div>
+		<div>
+			<label asp-for="Password" />
+			<input type="password" asp-for="Password" />
+		</div>
+		<div>
+			<input type="submit" value="Login" style="float:right" />
+		</div>
+	</form>
+</div>
+<script>
+	onpageshow = function () {
+		$(".layout-content").removeClass("has-navbar");
+		$(".layout-footer").hide();
+		$(".view - footer").hide();
+	}
+	
+</script>

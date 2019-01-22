@@ -6,7 +6,7 @@ using TimeTableLibrary.Extensions;
 using Octokit;
 using System.Linq;
 
-namespace TimeTableLibrary.CsvHelpers
+namespace TimeTableLibrary.GitHelpers
 {
 	public class GitWriter
 	{
