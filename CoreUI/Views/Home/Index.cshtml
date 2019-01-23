@@ -2,13 +2,16 @@
 @model List<FpmGroup>
 @{
 	ViewData["Title"] = "Main page";
-	await Html.RenderPartialAsync("_NavBar");
 }
+
+<div id="menu">
+
+</div>
 
 <div class="container">
 	<div class="well">
 		<div class="media-body">
-			<input list="groups" class="center-block" id="groupInput" style="max-width:20%" value="" />
+			<input list="groups" class="center-block" id="groupInput" style="max-width:20%" value=""/>
 			<datalist id="groups">
 				@foreach (var item in Model)
 				{
@@ -20,4 +23,23 @@
 	</div>
 </div>
 
+<script>
+	function submit() {
+		var value = $("#groupInput").val();
+		var option = $("[value='" + value + "']");
+		var container = $("#groupMenu");
 
+		if (value != "" && option.length > 0) {
+			var id = option[0].id;
+			var container = $("#groupMenu");
+			container.removeAttr('style');
+
+			$.post("GroupSelector", { ID: id }, function (data) {
+				$('#menu').html(data);
+			});
+		}
+		else
+			container.attr('style', 'display:none');
+
+	}
+</script>

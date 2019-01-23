@@ -25,8 +25,8 @@ namespace TimeTableLibrary.RozkladRequests
 		#region GetRequests
 		public RozkladClient()
 		{
-			var observer = new ExampleDiagnosticObserver();
-			IDisposable subscription = DiagnosticListener.AllListeners.Subscribe(observer);
+			//var observer = new ExampleDiagnosticObserver();
+			//IDisposable subscription = DiagnosticListener.AllListeners.Subscribe(observer);
 			client = new HttpClient(new HttpClientHandler() { UseCookies = false });
 			message = new HttpRequestMessage();
 			Timetable = new Dictionary<string, string>();

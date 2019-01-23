@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CoreUI.Controllers
 {
-    public class TimeTableController : Controller
+    public class TimetableController : Controller
     {
         public IActionResult Index()
         {

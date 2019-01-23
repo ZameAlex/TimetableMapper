@@ -21,7 +21,6 @@ namespace CoreUI.Controllers
 		{
 			this.fpmClient = fpmClient;
 			this.rozkladClient = rozkladClient;
-			Requests();
 		}
 
 		[HttpGet]
@@ -31,9 +30,10 @@ namespace CoreUI.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> IndexAsync(FpmUser user)
+		public async Task<IActionResult> Index(FpmUser user)
 		{
 			fpmClient.User = user;
+			await fpmClient.InitRequest();
 			await fpmClient.Login();
 			await fpmClient.SelectSubjectsAndGroups();
 			await fpmClient.SelectTeachers();
@@ -41,16 +41,18 @@ namespace CoreUI.Controllers
 		}
 
 		[HttpPost]
-		public void GroupSelector(FpmGroup group)
+		public async Task<IActionResult> GroupSelector(string ID)
 		{
-
+			try
+			{
+				rozkladClient.Group = fpmClient.Groups.FirstOrDefault(group => group.Id == ID).Name;
+				await rozkladClient.GetTimetable();
+			}
+			catch(Exception e)
+			{
+				return new JsonResult("Error while loading data. Group isn`t exists, or timetable for this group isn`t avalaible.");
+			}
+			return PartialView("_Menu");
 		}
-
-		#region Helper methods
-		private async void Requests()
-		{
-			await fpmClient.InitRequest();
-		}
-		#endregion Helper methods
 	}
 }

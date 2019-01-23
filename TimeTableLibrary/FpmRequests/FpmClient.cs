@@ -44,7 +44,14 @@ namespace TimeTableLibrary.FpmRequests
 		{
 			message.RequestUri = new Uri("http://fpm.kpi.ua/");
 			message.Method = HttpMethod.Get;
-			var response = await client.SendAsync(message);
+			try
+			{
+				var response = await client.SendAsync(message);
+			}
+			catch (InvalidOperationException e)
+			{
+				return;
+			}
 			sessionId = message.RequestUri.ToString().Split('=').Last();
 			headers.Add("Cookie", $"JSESSIONID={sessionId}");
 		}
@@ -63,8 +70,14 @@ namespace TimeTableLibrary.FpmRequests
 				{"password",User.Password }
 			});
 			Encoding.GetEncoding("windows-1251");
-			var response = await client.SendAsync(message);
-			var response1 = await client.SendAsync(message);
+			try
+			{
+				var response = await client.SendAsync(message);
+			}
+			catch(InvalidOperationException e)
+			{
+				return;
+			}
 		}
 
 		
