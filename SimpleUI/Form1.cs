@@ -74,7 +74,8 @@ namespace SimpleUI
 			if (group != null && !String.IsNullOrWhiteSpace(group.Id))
 			{
 				fpmClient.CurrentGroup = group;
-				rozkladClient = new RozkladClient(group.Name);
+				rozkladClient = new RozkladClient();
+				rozkladClient.Group = group.Name;
 				GetTimeTable();
 				checker = new TimeTableLibrary.GitHelpers.GitChecker(fpmClient, rozkladClient);
 				MapSubjects.Enabled = true;

@@ -1,6 +1,23 @@
-﻿
+﻿@using TimeTableLibrary.FpmModels;
+@model List<FpmGroup>
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Main page";
+	await Html.RenderPartialAsync("_NavBar");
 }
+
+<div class="container">
+	<div class="well">
+		<div class="media-body">
+			<input list="groups" class="center-block" id="groupInput" style="max-width:20%" value="" />
+			<datalist id="groups">
+				@foreach (var item in Model)
+				{
+					<option value=@item.Name id="@item.Id" />
+				}
+			</datalist>
+			<button class="center-block" onclick="submit()" style="max-width:20%">Select group</button>
+		</div>
+	</div>
+</div>
 
 

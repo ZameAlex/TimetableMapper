@@ -17,6 +17,13 @@ namespace CoreUI.Controllers
 		FpmClient fpmClient;
 		RozkladClient rozkladClient;
 
+		public HomeController(FpmClient fpmClient, RozkladClient rozkladClient)
+		{
+			this.fpmClient = fpmClient;
+			this.rozkladClient = rozkladClient;
+			Requests();
+		}
+
 		[HttpGet]
 		public IActionResult Authorization()
 		{
@@ -24,9 +31,26 @@ namespace CoreUI.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Index(FpmUser user)
+		public async Task<IActionResult> IndexAsync(FpmUser user)
 		{
-			return View();
+			fpmClient.User = user;
+			await fpmClient.Login();
+			await fpmClient.SelectSubjectsAndGroups();
+			await fpmClient.SelectTeachers();
+			return View("Index", fpmClient.Groups);
 		}
+
+		[HttpPost]
+		public void GroupSelector(FpmGroup group)
+		{
+
+		}
+
+		#region Helper methods
+		private async void Requests()
+		{
+			await fpmClient.InitRequest();
+		}
+		#endregion Helper methods
 	}
 }

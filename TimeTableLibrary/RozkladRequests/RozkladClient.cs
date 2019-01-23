@@ -17,17 +17,16 @@ namespace TimeTableLibrary.RozkladRequests
 	{
 		private const string FIRST_WEEK = "ctl00_MainContent_FirstScheduleTable";
 		private const string SECOND_WEEK = "ctl00_MainContent_SecondScheduleTable";
-		private readonly string group;
+		public string Group { get; set; }
 		public List<RozkladLesson>[] rozkladTimeTable {get;set;}
 		public List<RozkladSubject> Subjects { get; set; }
 		public List<RozkladTeacher> Teachers { get; set; }
 
 		#region GetRequests
-		public RozkladClient(string group)
+		public RozkladClient()
 		{
 			var observer = new ExampleDiagnosticObserver();
 			IDisposable subscription = DiagnosticListener.AllListeners.Subscribe(observer);
-			this.group = group;
 			client = new HttpClient(new HttpClientHandler() { UseCookies = false });
 			message = new HttpRequestMessage();
 			Timetable = new Dictionary<string, string>();
@@ -49,7 +48,7 @@ namespace TimeTableLibrary.RozkladRequests
 
 
 
-		public async Task InitRequest()
+		private async Task InitRequest()
 		{
 			SetHeaders(message);
 			message.Headers.Add("Referer", "http://rozklad.kpi.ua");
@@ -71,7 +70,7 @@ namespace TimeTableLibrary.RozkladRequests
 		{
 			await InitRequest();
 			//Group selection
-			Timetable.Add("ctl00$MainContent$ctl00$txtboxGroup", group);
+			Timetable.Add("ctl00$MainContent$ctl00$txtboxGroup", Group);
 			message = new HttpRequestMessage();
 			SetHeaders(message);
 			message.Headers.Add("Referer", "http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");

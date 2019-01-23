@@ -16,7 +16,8 @@ namespace ConsoleTimetableMapper
 			new GitWriter("teachers.csv").RewriteCsvFile(content);
 			Console.OutputEncoding = System.Text.Encoding.Unicode;
 			string groupName = "КВ-83мн";
-			RozkladClient client = new RozkladClient(groupName);
+			RozkladClient client = new RozkladClient();
+			client.Group = groupName;
 			var observer = new ExampleDiagnosticObserver();
 			IDisposable subscription = DiagnosticListener.AllListeners.Subscribe(observer);
 			var rozkladLessons = client.GetTimetable().Result;
