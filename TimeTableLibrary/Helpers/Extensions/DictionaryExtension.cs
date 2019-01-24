@@ -7,6 +7,28 @@ namespace TimeTableLibrary.Extensions
 {
 	public static class DictionaryExtension
 	{
+
+		public static KeyValuePair<string, string> IndexOf(this IDictionary dictionary, int count)
+		{
+			var enumerator = dictionary.GetEnumerator();
+			enumerator.MoveNext();
+			for (int i = 0; i < dictionary.Count; i++)
+			{
+				if (i == count)
+				{
+					var result = new KeyValuePair<string, string>
+					(
+					enumerator.Key.ToString(),
+					enumerator.Value.ToString() 
+					);
+					enumerator.Reset();
+					return result;
+				}
+				enumerator.MoveNext();
+			}
+			enumerator.Reset();
+			return new KeyValuePair<string, string>();
+		}
 		public static void Add<TKey,TValue>(this IDictionary dictionary, Tuple<TKey, TValue> tuple)
 		{
 			dictionary.Add(tuple.Item1, tuple.Item2);
