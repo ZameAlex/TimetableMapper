@@ -10,6 +10,7 @@ using TimeTableLibrary.RozkladModels;
 using TimeTableLibrary.Enums;
 using ConsoleTimetableMapper;
 using System.Diagnostics;
+using TimeTableLibrary.Extensions;
 
 namespace TimeTableLibrary.RozkladRequests
 {
@@ -51,7 +52,7 @@ namespace TimeTableLibrary.RozkladRequests
 		private async Task InitRequest()
 		{
 			SetHeaders(message);
-			message.Headers.Add("Referer", "http://rozklad.kpi.ua");
+			message.Headers.AddIfNotExists("Referer", "http://rozklad.kpi.ua");
 			message.Method = HttpMethod.Get;
 			message.RequestUri = new Uri("http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
 			var document = new HtmlDocument();
@@ -60,7 +61,7 @@ namespace TimeTableLibrary.RozkladRequests
 			var inputs = document.DocumentNode.SelectNodes(@"//input[@type='hidden']");
 			foreach (var item in inputs)
 			{
-				Timetable.Add(item.Attributes["name"].Value, item.Attributes["value"].Value);
+				Timetable.AddIfNotExists(item.Attributes["name"].Value, item.Attributes["value"].Value);
 			}
 		}
 
@@ -68,15 +69,22 @@ namespace TimeTableLibrary.RozkladRequests
 
 		public async Task<List<RozkladLesson>[]> GetTimetable()
 		{
-			await InitRequest();
+			try
+			{
+				await InitRequest();
+			}
+			catch(Exception e)
+			{
+
+			}
 			//Group selection
-			Timetable.Add("ctl00$MainContent$ctl00$txtboxGroup", Group);
+			Timetable.AddNew("ctl00$MainContent$ctl00$txtboxGroup", Group);
 			message = new HttpRequestMessage();
 			SetHeaders(message);
-			message.Headers.Add("Referer", "http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
+			message.Headers.AddIfNotExists("Referer", "http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
 			message.Method = HttpMethod.Post;
 			message.RequestUri = new Uri("http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
-			Timetable.Add("ctl00$MainContent$ctl00$btnShowSchedule", "Розклад занять");
+			Timetable.AddIfNotExists("ctl00$MainContent$ctl00$btnShowSchedule", "Розклад занять");
 			message.Content = new FormUrlEncodedContent(Timetable);
 			var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
 			var document = new HtmlDocument();

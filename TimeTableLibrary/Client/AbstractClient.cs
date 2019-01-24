@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using TimeTableLibrary.Extensions;
 
 namespace TimeTableLibrary.Client
 {
@@ -29,7 +30,7 @@ namespace TimeTableLibrary.Client
 		protected void SetHeaders(HttpRequestMessage message)
 		{
 			foreach (var item in headers)
-				message.Headers.Add(item.Key, item.Value);
+				message.Headers.AddIfNotExists(item.Key, item.Value);
 		}
 	}
 }

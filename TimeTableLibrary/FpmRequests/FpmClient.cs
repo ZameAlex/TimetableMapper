@@ -53,7 +53,7 @@ namespace TimeTableLibrary.FpmRequests
 				return;
 			}
 			sessionId = message.RequestUri.ToString().Split('=').Last();
-			headers.Add("Cookie", $"JSESSIONID={sessionId}");
+			headers.AddIfNotExists("Cookie", $"JSESSIONID={sessionId}");
 		}
 
 		

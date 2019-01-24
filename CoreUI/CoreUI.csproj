@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="Views\Timetable\" />
+    <Folder Include="Views\Teachers\" />
     <Folder Include="Views\Subjects\" />
   </ItemGroup>
 
