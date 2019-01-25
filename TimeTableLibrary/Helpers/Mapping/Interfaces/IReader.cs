@@ -6,6 +6,6 @@ namespace TimeTableLibrary.Helpers.Interfaces
 {
 	public interface IReader
 	{
-		Dictionary<string, string> ParseSharedMapping();
+		Dictionary<string, string> ParseMapping();
 	}
 }

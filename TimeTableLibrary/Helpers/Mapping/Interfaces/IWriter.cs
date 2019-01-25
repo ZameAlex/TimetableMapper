@@ -6,6 +6,6 @@ namespace TimeTableLibrary.Helpers.Interfaces
 {
 	public interface IWriter
 	{
-		void WriteShareMapping(Dictionary<string, string> dictionary);
+		void WriteMapping(Dictionary<string, string> dictionary);
 	}
 }

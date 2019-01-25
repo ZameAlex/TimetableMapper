@@ -5,6 +5,7 @@ using TimeTableLibrary.Helpers;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.Mappers;
 using TimeTableLibrary.RozkladRequests;
+using TimeTableLibrary.Helpers.Git;
 
 namespace ConsoleTimetableMapper
 {
@@ -12,8 +13,8 @@ namespace ConsoleTimetableMapper
 	{
 		static void Main(string[] args)
 		{
-			var content = new GitReader("teachers.csv").ParseSharedMapping();
-			new GitWriter("teachers.csv").RewriteCsvFile(content);
+			var content = new GitReader("teachers.csv").ParseMapping();
+			new GitWriter("teachers.csv").WriteMapping(content);
 			Console.OutputEncoding = System.Text.Encoding.Unicode;
 			string groupName = "КВ-83мн";
 			RozkladClient client = new RozkladClient();

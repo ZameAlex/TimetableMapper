@@ -7,6 +7,7 @@ using TimeTableLibrary.RozkladRequests;
 using TimeTableLibrary.Mappers.FpmMappers;
 using TimeTableLibrary.Mappers.RozkladMappers;
 using TimeTableLibrary.Extensions;
+using TimeTableLibrary.Helpers.Git;
 
 namespace TimeTableLibrary.Helpers
 {
@@ -32,8 +33,8 @@ namespace TimeTableLibrary.Helpers
 			this.FTMapper = FTMapper;
 			Subjects = new Dictionary<RozkladModels.RozkladSubject, FpmModels.FpmSubject>();
 			Teachers = new Dictionary<RozkladModels.RozkladTeacher, FpmModels.FpmTeacher>();
-			var SubjectsExistInMapping = new GitReader("teachers.csv").ParseSharedMapping();
-			var TeachersExistInMapping = new GitReader("subjects.csv").ParseSharedMapping();
+			var SubjectsExistInMapping = new GitReader("teachers.csv").ParseMapping();
+			var TeachersExistInMapping = new GitReader("subjects.csv").ParseMapping();
 			AddMappedSubjects(SubjectsExistInMapping);
 			AddMappedTeachers(TeachersExistInMapping);
 		}
