@@ -7,9 +7,6 @@ namespace TimeTableLibrary.Helpers.Local
 {
 	public class LocalWriter : Abstracts.AbstractWriter, Interfaces.IWriter
 	{
-		public LocalWriter(string filename) : base(filename)
-		{
-		}
 
 		public void WriteMapping(Dictionary<string, string> dictionary)
 		{
@@ -18,10 +15,10 @@ namespace TimeTableLibrary.Helpers.Local
 
 		protected override string Write(Dictionary<string, string> dictionary)
 		{
-			CsvHelper.CsvWriter writer = new CsvHelper.CsvWriter(new StreamWriter(filename));
+			CsvHelper.CsvWriter writer = new CsvHelper.CsvWriter(new StreamWriter(Filename));
 			writer.WriteRecords(dictionary);
 			writer.Dispose();
-			return filename;
+			return Filename;
 		}
 	}
 }

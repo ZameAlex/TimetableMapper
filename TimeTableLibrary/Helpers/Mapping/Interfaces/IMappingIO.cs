@@ -4,8 +4,8 @@ using System.Text;
 
 namespace TimeTableLibrary.Helpers.Interfaces
 {
-	public interface IWriter:IMappingIO
+	public interface IMappingIO
 	{
-		void WriteMapping(Dictionary<string, string> dictionary);
+		public string Filename { get; set; }
 	}
 }

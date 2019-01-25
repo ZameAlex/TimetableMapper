@@ -5,12 +5,8 @@ using System.Text;
 
 namespace TimeTableLibrary.Helpers.Abstracts
 {
-	public abstract class AbstractWriter : AbstractIO
+	public abstract class AbstractWriter
 	{
-		public AbstractWriter(string filename) : base(filename)
-		{
-		}
-
 		protected virtual string Write(Dictionary<string, string> dictionary)
 		{
 			MemoryStream stream = new MemoryStream();

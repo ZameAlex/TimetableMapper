@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TimeTableLibrary.Helpers.Interfaces
 {
-	public interface IReader
+	public interface IReader:IMappingIO
 	{
 		Dictionary<string, string> ParseMapping();
 	}

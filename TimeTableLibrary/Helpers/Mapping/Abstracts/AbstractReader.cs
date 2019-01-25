@@ -5,11 +5,8 @@ using System.Text;
 
 namespace TimeTableLibrary.Helpers.Abstracts
 {
-	public abstract class AbstractReader:AbstractIO
+	public abstract class AbstractReader
 	{
-		public AbstractReader(string filename) : base(filename)
-		{
-		}
 
 		protected virtual Dictionary<string, string> Read(StreamReader reader)
 		{

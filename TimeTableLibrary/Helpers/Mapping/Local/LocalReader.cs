@@ -9,13 +9,9 @@ namespace TimeTableLibrary.Helpers.Local
 {
 	public class LocalReader : AbstractReader, IReader
 	{
-		public LocalReader(string filename) : base(filename)
-		{
-		}
-
 		public Dictionary<string, string> ParseMapping()
 		{
-			return Read(new StreamReader(filename));
+			return Read(new StreamReader(Filename));
 		}
 	}
 }

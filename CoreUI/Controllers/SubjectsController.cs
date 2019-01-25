@@ -14,9 +14,9 @@ namespace CoreUI.Controllers
     {
 		FpmClient fpmClient;
 		RozkladClient rozkladClient;
-		ShareMappingService service;
+		MappingService service;
 
-		public SubjectsController(FpmClient fpmClient, RozkladClient rozkladClient, ShareMappingService service)
+		public SubjectsController(FpmClient fpmClient, RozkladClient rozkladClient, MappingService service)
 		{
 			this.rozkladClient = rozkladClient;
 			this.fpmClient = fpmClient;

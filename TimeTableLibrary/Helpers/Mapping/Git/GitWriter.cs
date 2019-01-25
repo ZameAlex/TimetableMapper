@@ -10,14 +10,10 @@ namespace TimeTableLibrary.Helpers.Git
 {
 	public class GitWriter : Abstracts.AbstractWriter, Interfaces.IWriter
 	{
-		public GitWriter(string filename) : base(filename)
-		{
-		}
-
 		public void WriteMapping(Dictionary<string, string> dictionary)
 		{
 			bool isWriteNessesary = false;
-			GitReader reader = new GitReader(filename);
+			GitReader reader = new GitReader();
 			var parsedResult = new Dictionary<string, string>();
 			parsedResult = reader.ParseMapping();
 			foreach (var item in dictionary)
@@ -35,8 +31,8 @@ namespace TimeTableLibrary.Helpers.Git
 				var userName = "ZameAlex";
 				var repository = github.Repository.GetAllForUser(userName).Result.Single(r => r.Name == "TimetableMapper");
 				RepositoryContentsClient contentsClient = new RepositoryContentsClient(new ApiConnection(github.Connection));
-				UpdateFileRequest request = new UpdateFileRequest($"{filename} was changed", Write(parsedResult), contentsClient.GetAllContents(userName, repository.Name, filename).Result.First().Sha);
-				github.Repository.Content.UpdateFile(repository.Id, filename, request).Wait();
+				UpdateFileRequest request = new UpdateFileRequest($"{Filename} was changed", Write(parsedResult), contentsClient.GetAllContents(userName, repository.Name, Filename).Result.First().Sha);
+				github.Repository.Content.UpdateFile(repository.Id, Filename, request).Wait();
 			}
 
 		}

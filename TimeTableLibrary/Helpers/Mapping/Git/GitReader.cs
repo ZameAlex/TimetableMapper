@@ -11,9 +11,6 @@ namespace TimeTableLibrary.Helpers.Git
 {
 	public class GitReader: Abstracts.AbstractReader, Interfaces.IReader
 	{
-		public GitReader(string filename) : base(filename)
-		{
-		}
 
 		private string DownloadCsv()
 		{
@@ -21,7 +18,7 @@ namespace TimeTableLibrary.Helpers.Git
 			var userName = "ZameAlex";
 			var repository = github.Repository.GetAllForUser(userName).Result.Single(r => r.Name == "TimetableMapper");
 			RepositoryContentsClient contentsClient = new RepositoryContentsClient(new ApiConnection(github.Connection));
-			var content = contentsClient.GetAllContents(userName, repository.Name, filename).Result.First();
+			var content = contentsClient.GetAllContents(userName, repository.Name, Filename).Result.First();
 			return content.Content;
 		}
 

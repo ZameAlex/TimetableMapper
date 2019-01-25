@@ -8,24 +8,32 @@ using TimeTableLibrary.Mappers.FpmMappers;
 using TimeTableLibrary.Mappers.RozkladMappers;
 using TimeTableLibrary.Extensions;
 using TimeTableLibrary.Helpers.Git;
+using TimeTableLibrary.Helpers.Interfaces;
+using TimeTableLibrary.Mappers.Interfaces;
 
 namespace TimeTableLibrary.Helpers
 {
-	public class ShareMappingService
+	public class MappingService
 	{
 		public Dictionary<RozkladModels.RozkladSubject,FpmModels.FpmSubject> Subjects { get; protected set; }
 		public Dictionary<RozkladModels.RozkladTeacher,FpmModels.FpmTeacher> Teachers { get; protected set; }
 
-		RozkladSubjectMapper RSMapper;
-		RozkladTeacherMapper RTMapper;
-		FpmSubjectMapper FSMapper;
-		FpmTeacherMapper FTMapper;
+		IMapper<string,RozkladModels.RozkladSubject> RSMapper;
+		IMapper<string, RozkladModels.RozkladTeacher> RTMapper;
+		IMapper<string, FpmModels.FpmSubject> FSMapper;
+		IMapper<string, FpmModels.FpmTeacher> FTMapper;
+		IReader reader;
+		IWriter writer;
 
-		public ShareMappingService(
-		RozkladSubjectMapper RSMapper, 
-		RozkladTeacherMapper RTMapper, 
-		FpmSubjectMapper FSMapper, 
-		FpmTeacherMapper FTMapper)
+		public MappingService(
+		IMapper<string, RozkladModels.RozkladSubject> RSMapper,
+		IMapper<string, RozkladModels.RozkladTeacher> RTMapper,
+		IMapper<string, FpmModels.FpmSubject> FSMapper,
+		IMapper<string, FpmModels.FpmTeacher> FTMapper,
+		IReader reader,
+		IWriter writer,
+		string newFilename
+		)
 		{
 			this.RTMapper = RTMapper;
 			this.FSMapper = FSMapper;
@@ -33,8 +41,9 @@ namespace TimeTableLibrary.Helpers
 			this.FTMapper = FTMapper;
 			Subjects = new Dictionary<RozkladModels.RozkladSubject, FpmModels.FpmSubject>();
 			Teachers = new Dictionary<RozkladModels.RozkladTeacher, FpmModels.FpmTeacher>();
-			var SubjectsExistInMapping = new GitReader("teachers.csv").ParseMapping();
-			var TeachersExistInMapping = new GitReader("subjects.csv").ParseMapping();
+			var SubjectsExistInMapping = reader.ParseMapping();
+			reader.Filename = newFilename;
+			var TeachersExistInMapping = reader.ParseMapping();
 			AddMappedSubjects(SubjectsExistInMapping);
 			AddMappedTeachers(TeachersExistInMapping);
 		}
