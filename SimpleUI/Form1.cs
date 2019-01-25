@@ -21,7 +21,7 @@ namespace SimpleUI
 	{
 		FpmClient fpmClient;
 		RozkladClient rozkladClient;
-		TimeTableLibrary.GitHelpers.GitChecker checker;
+		TimeTableLibrary.GitHelpers.ShareMappingService checker;
 		public Form1()
 		{
 			InitializeComponent();
@@ -77,7 +77,12 @@ namespace SimpleUI
 				rozkladClient = new RozkladClient();
 				rozkladClient.Group = group.Name;
 				GetTimeTable();
-				checker = new TimeTableLibrary.GitHelpers.GitChecker(fpmClient, rozkladClient);
+				checker = new TimeTableLibrary.GitHelpers.ShareMappingService(fpmClient, rozkladClient, 
+				new TimeTableLibrary.Mappers.RozkladMappers.RozkladSubjectMapper(rozkladClient), 
+				new TimeTableLibrary.Mappers.RozkladMappers.RozkladTeacherMapper(rozkladClient), 
+				new TimeTableLibrary.Mappers.FpmMappers.FpmSubjectMapper(fpmClient),
+				new TimeTableLibrary.Mappers.FpmMappers.FpmTeacherMapper(fpmClient));
+
 				MapSubjects.Enabled = true;
 				MapTeachers.Enabled = true;
 				EnablingChanges();
