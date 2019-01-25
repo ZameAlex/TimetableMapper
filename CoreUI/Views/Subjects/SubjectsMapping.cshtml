@@ -5,7 +5,7 @@
 }
 
 <h2 class="text-center">Subjects Mapping</h2>
-<form asp-action="SubjectsMapping">
+
 	<div class="form-horizontal">
 		<div class="form-group">
 			@for (int counter = 0; counter < Model.Keys.Count; counter++)
@@ -29,9 +29,16 @@
 			}
 		</div>
 	</div>
-	<input type="submit" value="Save" class="btn btn-primary" />
-</form>
+	<input type="submit" value="Save" class="btn btn-primary" onclick="Submit()"/>
+
 
 <script>
-
+	function Submit() {
+		var i;
+		var ids = new Array(@Model.Count);
+		for (i = 0; i <@Model.Count; i++) {
+			ids[i] = $("#" + i).val();
+		}
+		$.post("SubjectsMapping", { MappedSubjects: ids });
+	}
 </script>

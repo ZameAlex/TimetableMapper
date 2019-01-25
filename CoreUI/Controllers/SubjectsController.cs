@@ -36,8 +36,8 @@ namespace CoreUI.Controllers
 			ViewBag.Subjects = fpmClient.Subjects;
 			return View(dictionary);
 		}
-
-		public IActionResult SubjectsMapping(Dictionary<string,string> MappedSubjects)
+		[HttpPost]
+		public IActionResult SubjectsMapping(string[] MappedSubjects)
 		{
 			return View();
 		}

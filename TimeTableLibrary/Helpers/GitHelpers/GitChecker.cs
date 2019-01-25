@@ -11,6 +11,8 @@ namespace TimeTableLibrary.GitHelpers
 	{
 		public Dictionary<RozkladModels.RozkladSubject,FpmModels.FpmSubject> Subjects { get; set; }
 		public Dictionary<RozkladModels.RozkladTeacher,FpmModels.FpmTeacher> Teachers { get; set; }
+		public Dictionary<string, string> SubjectsExistInMapping{ get; protected set; }
+		public Dictionary<string, string> TeachersExistInMapping { get; protected set; }
 
 		FpmClient fpmClient;
 		RozkladClient rozkladClient;
@@ -21,38 +23,40 @@ namespace TimeTableLibrary.GitHelpers
 			this.rozkladClient = rozkladClient;
 			Subjects = new Dictionary<RozkladModels.RozkladSubject, FpmModels.FpmSubject>();
 			Teachers = new Dictionary<RozkladModels.RozkladTeacher, FpmModels.FpmTeacher>();
+			SubjectsExistInMapping = new GitReader("teachers.csv").ParseSharedMapping();
+			TeachersExistInMapping = new GitReader("subjects.csv").ParseSharedMapping();
 		}
 
-		public bool IsTeacherMapped()
+		public bool IsObjectsMapped(bool isTeacherOrSubject)
 		{
-			var dictionary = new GitReader("teachers.csv").ParseSharedMapping();
-			foreach(var item in rozkladClient.Teachers)
+			if (isTeacherOrSubject)
 			{
-				if (!dictionary.ContainsKey(item.Name))
-					return false;
-				else
+				foreach (var item in rozkladClient.Teachers)
 				{
-					Teachers.Add(rozkladClient.Teachers.SingleOrDefault(t => t.Name == item.Name),
-						fpmClient.Teachers.SingleOrDefault(t => t.Id == dictionary[item.Name]));
+					if (!TeachersExistInMapping.ContainsKey(item.Name))
+						return false;
+					else
+					{
+						Teachers.Add(rozkladClient.Teachers.SingleOrDefault(t => t.Name == item.Name),
+							fpmClient.Teachers.SingleOrDefault(t => t.Id == TeachersExistInMapping[item.Name]));
+					}
 				}
+				return true;
 			}
-			return true;
-		}
-
-		public bool IsSubjectMapped()
-		{
-			var dictionary = new GitReader("subjects.csv").ParseSharedMapping();
-			foreach (var item in rozkladClient.Subjects)
+			else
 			{
-				if (!dictionary.ContainsKey(item.Title))
-					return false;
-				else
+				foreach (var item in rozkladClient.Subjects)
 				{
-					Subjects.Add(rozkladClient.Subjects.SingleOrDefault(t => t.Title == item.Title),
-						fpmClient.Subjects.SingleOrDefault(t => t.Id == dictionary[item.Title]));
+					if (!SubjectsExistInMapping.ContainsKey(item.Name))
+						return false;
+					else
+					{
+						Subjects.Add(rozkladClient.Subjects.SingleOrDefault(t => t.Title == item.Title),
+							fpmClient.Subjects.SingleOrDefault(t => t.Id == SubjectsExistInMapping[item.Title]));
+					}
 				}
+				return true;
 			}
-			return true;
 		}
 	}
 }

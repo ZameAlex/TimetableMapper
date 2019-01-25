@@ -92,7 +92,7 @@ namespace SimpleUI
 
 		private void EnablingChanges()
 		{
-			if (checker.IsSubjectMapped() && checker.IsTeacherMapped())
+			if (checker.IsObjectsMapped(true) && checker.IsObjectsMapped(false))
 			{
 				MapTimetable.Enabled = true;
 				MapSubjects.Enabled = false;
