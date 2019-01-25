@@ -5,17 +5,17 @@ using System.Linq;
 using System.Text;
 using CsvHelper;
 using Octokit;
+using TimeTableLibrary.Helpers.Interfaces;
 
-namespace TimeTableLibrary.GitHelpers
+namespace TimeTableLibrary.Helpers.Git
 {
-	public class GitReader
+	public class GitReader: Interfaces.IReader
 	{
 		private readonly string fileName;
 
 		public GitReader(string fileName)
 		{
 			this.fileName = fileName;
-
 		}
 
 		private string DownloadCsv()

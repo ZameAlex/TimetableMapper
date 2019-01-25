@@ -144,7 +144,7 @@ namespace TimeTableLibrary.FpmRequests
 			var response = await client.SendAsync(message);
 		}
 
-		public async Task SetRequest(List<ResultLesson> lessons, GitHelpers.ShareMappingService checker)
+		public async Task SetRequest(List<ResultLesson> lessons, Helpers.ShareMappingService checker)
 		{
 			PreChangingTimetableRequests();
 			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/savescheduler");
@@ -184,7 +184,7 @@ namespace TimeTableLibrary.FpmRequests
 		#region HelperMethods
 
 		#region CreatePostObjects
-		public Tuple<string,string> GetLesson(bool first, GitHelpers.ShareMappingService checker, ResultLesson lesson)
+		public Tuple<string,string> GetLesson(bool first, Helpers.ShareMappingService checker, ResultLesson lesson)
 		{
 			if (first)
 				return new Tuple<string,string>($"subject_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t.Title == lesson.FirstWeekLesson.Subject.Title)].Id);
@@ -192,7 +192,7 @@ namespace TimeTableLibrary.FpmRequests
 				return new Tuple<string, string>($"subject_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t.Title == lesson.SecondWeekLesson.Subject.Title)].Id);
 		}
 
-		public Tuple<string, string> GetRoom(bool first, GitHelpers.ShareMappingService checker, ResultLesson lesson)
+		public Tuple<string, string> GetRoom(bool first, Helpers.ShareMappingService checker, ResultLesson lesson)
 		{
 			if (first)
 				return new Tuple<string, string>($"room_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", lesson.FirstWeekLesson.LessonTypeAndRoom);
@@ -200,7 +200,7 @@ namespace TimeTableLibrary.FpmRequests
 				return new Tuple<string, string>($"room_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", lesson.SecondWeekLesson.LessonTypeAndRoom);
 		}
 
-		public Tuple<string, string> GetTeacher(bool first, GitHelpers.ShareMappingService checker, ResultLesson lesson)
+		public Tuple<string, string> GetTeacher(bool first, Helpers.ShareMappingService checker, ResultLesson lesson)
 		{
 			if (first)
 				return new Tuple<string, string>($"teacher_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Teachers[checker.Teachers.Keys.Single(t => t.Name == lesson.FirstWeekLesson.Teacher.Name)].Id);

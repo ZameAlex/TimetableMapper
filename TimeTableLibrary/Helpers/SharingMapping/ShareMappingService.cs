@@ -8,7 +8,7 @@ using TimeTableLibrary.Mappers.FpmMappers;
 using TimeTableLibrary.Mappers.RozkladMappers;
 using TimeTableLibrary.Extensions;
 
-namespace TimeTableLibrary.GitHelpers
+namespace TimeTableLibrary.Helpers
 {
 	public class ShareMappingService
 	{

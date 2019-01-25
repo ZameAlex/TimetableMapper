@@ -13,7 +13,7 @@
 			<div class="form-group row">
 				<div style="border:dotted; border-width:1px" >
 					<div class="col-lg-6">
-						<label class="col-xs-6" style="float: none; margin-top : 10px" asp-for="@Model[counter]">@Model[counter]</label>
+						<label class="col-xs-6" style="float: none; margin-top : 10px" asp-for="@Model[counter]" id="key+@counter">@Model[counter]</label>
 					</div>
 					<div class="col-lg-6">
 						<input list ="groups" class="col-xs-6" id="@counter" style="float: none; margin-top : 10px" type="text"/>

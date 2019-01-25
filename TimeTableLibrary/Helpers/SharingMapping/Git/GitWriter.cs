@@ -6,9 +6,9 @@ using TimeTableLibrary.Extensions;
 using Octokit;
 using System.Linq;
 
-namespace TimeTableLibrary.GitHelpers
+namespace TimeTableLibrary.Helpers.Git
 {
-	public class GitWriter
+	public class GitWriter:Interfaces.IWriter
 	{
 		private readonly string fileName;
 
@@ -17,7 +17,7 @@ namespace TimeTableLibrary.GitHelpers
 			this.fileName = fileName;
 		}
 
-		public void RewriteCsvFile(Dictionary<string,string> dictionary)
+		public void WriteShareMapping(Dictionary<string,string> dictionary)
 		{
 			bool isWriteNessesary = false;
 			GitReader reader = new GitReader(fileName);

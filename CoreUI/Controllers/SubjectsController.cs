@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using TimeTableLibrary.Extensions;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.RozkladRequests;
-using TimeTableLibrary.GitHelpers;
+using TimeTableLibrary.Helpers;
 
 namespace CoreUI.Controllers
 {
@@ -14,30 +14,30 @@ namespace CoreUI.Controllers
     {
 		FpmClient fpmClient;
 		RozkladClient rozkladClient;
-		ShareMappingService checker;
+		ShareMappingService service;
 
-		public SubjectsController(FpmClient fpmClient, RozkladClient rozkladClient, ShareMappingService checker)
+		public SubjectsController(FpmClient fpmClient, RozkladClient rozkladClient, ShareMappingService service)
 		{
 			this.rozkladClient = rozkladClient;
 			this.fpmClient = fpmClient;
-			this.checker = checker;
+			this.service = service;
 		}
 
 		public IActionResult Index()
-        {
-            return View();
-        }
+		{
+			return View();
+		}
 
 		[HttpGet]
 		public IActionResult SubjectsMapping()
 		{
 			ViewBag.Subjects = fpmClient.Subjects;
-			return View(rozkladClient.Subjects);
+			return View(rozkladClient.Subjects.Select(s=>s.Title).ToList());
 		}
 		[HttpPost]
 		public IActionResult SubjectsMapping(string[] MappedSubjects)
 		{
-			//checker.Subjects = new Dictionary<TimeTableLibrary.RozkladModels.RozkladSubject, TimeTableLibrary.FpmModels.FpmSubject>
+			
 			return View();
 		}
 	}

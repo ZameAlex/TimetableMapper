@@ -9,9 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTableLibrary;
-using TimeTableLibrary.GitHelpers;
+using TimeTableLibrary.Helpers;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.RozkladRequests;
+using TimeTableLibrary.Mappers.Interfaces;
+using TimeTableLibrary.RozkladModels;
+using TimeTableLibrary.Mappers.RozkladMappers;
+using TimeTableLibrary.FpmModels;
+using TimeTableLibrary.Mappers.FpmMappers;
 
 namespace CoreUI
 {
@@ -38,6 +43,10 @@ namespace CoreUI
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			services.AddSingleton<FpmClient>();
 			services.AddSingleton<RozkladClient>();
+			services.AddScoped<RozkladSubjectMapper>();
+			services.AddScoped<RozkladTeacherMapper>();
+			services.AddScoped<FpmSubjectMapper>();
+			services.AddScoped<FpmTeacherMapper>();
 			services.AddSingleton<ShareMappingService>();
 		}
 

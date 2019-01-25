@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TimeTableLibrary.Mappers.Interfaces
 {
-	interface IMapper<TObject,TResult>
+	public interface IMapper<TObject,TResult>
 	{
 		TResult Map(TObject obj);
 
