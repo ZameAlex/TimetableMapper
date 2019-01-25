@@ -15,23 +15,17 @@ namespace TimeTableLibrary.GitHelpers
 		public Dictionary<RozkladModels.RozkladSubject,FpmModels.FpmSubject> Subjects { get; protected set; }
 		public Dictionary<RozkladModels.RozkladTeacher,FpmModels.FpmTeacher> Teachers { get; protected set; }
 
-		FpmClient fpmClient;
-		RozkladClient rozkladClient;
 		RozkladSubjectMapper RSMapper;
 		RozkladTeacherMapper RTMapper;
 		FpmSubjectMapper FSMapper;
 		FpmTeacherMapper FTMapper;
 
 		public ShareMappingService(
-		FpmClient fpmClient, 
-		RozkladClient rozkladClient, 
 		RozkladSubjectMapper RSMapper, 
 		RozkladTeacherMapper RTMapper, 
 		FpmSubjectMapper FSMapper, 
 		FpmTeacherMapper FTMapper)
 		{
-			this.fpmClient = fpmClient;
-			this.rozkladClient = rozkladClient;
 			this.RTMapper = RTMapper;
 			this.FSMapper = FSMapper;
 			this.RSMapper = RSMapper;

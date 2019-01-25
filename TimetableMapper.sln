@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreUI", "CoreUI\CoreUI.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTableUI", "TimeTableUI\TimeTableUI.csproj", "{B2A785FE-3C16-4EE1-900A-C4A1CE55D1C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleUI", "SimpleUI\SimpleUI.csproj", "{7B685CEF-8AD2-4450-9FDF-79862A54C5C9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTimetableMapper", "ConsoleTimetableMapper\ConsoleTimetableMapper.csproj", "{8110FFBE-BA95-4A45-BEE6-511CFAF19A33}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{B2A785FE-3C16-4EE1-900A-C4A1CE55D1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2A785FE-3C16-4EE1-900A-C4A1CE55D1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2A785FE-3C16-4EE1-900A-C4A1CE55D1C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B685CEF-8AD2-4450-9FDF-79862A54C5C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B685CEF-8AD2-4450-9FDF-79862A54C5C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B685CEF-8AD2-4450-9FDF-79862A54C5C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B685CEF-8AD2-4450-9FDF-79862A54C5C9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8110FFBE-BA95-4A45-BEE6-511CFAF19A33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8110FFBE-BA95-4A45-BEE6-511CFAF19A33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8110FFBE-BA95-4A45-BEE6-511CFAF19A33}.Release|Any CPU.ActiveCfg = Release|Any CPU
