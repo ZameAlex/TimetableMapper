@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TimeTableLibrary.Enums;
-using TimeTableLibrary.RozkladModels;
 
-namespace TimeTableLibrary.FpmModels
+namespace TimeTableLibrary.RozkladModels
 {
 	public class ResultLesson
 	{
