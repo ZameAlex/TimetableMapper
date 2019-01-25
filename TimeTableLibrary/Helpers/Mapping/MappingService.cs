@@ -32,7 +32,8 @@ namespace TimeTableLibrary.Helpers
 		IMapper<string, FpmModels.FpmTeacher> FTMapper,
 		IReader reader,
 		IWriter writer,
-		string newFilename
+		string startFilename= "subjects.csv",
+		string newFilename= "teachers.csv"
 		)
 		{
 			this.RTMapper = RTMapper;
@@ -41,6 +42,7 @@ namespace TimeTableLibrary.Helpers
 			this.FTMapper = FTMapper;
 			Subjects = new Dictionary<RozkladModels.RozkladSubject, FpmModels.FpmSubject>();
 			Teachers = new Dictionary<RozkladModels.RozkladTeacher, FpmModels.FpmTeacher>();
+			reader.Filename = startFilename;
 			var SubjectsExistInMapping = reader.ParseMapping();
 			reader.Filename = newFilename;
 			var TeachersExistInMapping = reader.ParseMapping();

@@ -5,11 +5,14 @@ using System.Text;
 using TimeTableLibrary.Extensions;
 using Octokit;
 using System.Linq;
+using TimeTableLibrary.Helpers.Interfaces;
 
 namespace TimeTableLibrary.Helpers.Git
 {
-	public class GitWriter : Abstracts.AbstractWriter, Interfaces.IWriter
+	public class GitWriter : Abstracts.AbstractWriter, IWriter
 	{
+		public string Filename { get; set; }
+
 		public void WriteMapping(Dictionary<string, string> dictionary)
 		{
 			bool isWriteNessesary = false;
@@ -35,6 +38,11 @@ namespace TimeTableLibrary.Helpers.Git
 				github.Repository.Content.UpdateFile(repository.Id, Filename, request).Wait();
 			}
 
+		}
+
+		void IWriter.WriteMapping(Dictionary<string, string> dictionary)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

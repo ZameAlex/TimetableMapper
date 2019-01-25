@@ -35,9 +35,10 @@ namespace CoreUI.Controllers
 			return View(rozkladClient.Subjects.Select(s=>s.Title).ToList());
 		}
 		[HttpPost]
-		public IActionResult SubjectsMapping(string[] MappedSubjects)
+		public IActionResult SubjectsMapping(Dictionary<string,string> MappedSubjects)
 		{
 			
+
 			return View();
 		}
 	}

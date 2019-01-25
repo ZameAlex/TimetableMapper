@@ -7,6 +7,7 @@ namespace TimeTableLibrary.Helpers.Local
 {
 	public class LocalWriter : Abstracts.AbstractWriter, Interfaces.IWriter
 	{
+		public string Filename { get; set; }
 
 		public void WriteMapping(Dictionary<string, string> dictionary)
 		{

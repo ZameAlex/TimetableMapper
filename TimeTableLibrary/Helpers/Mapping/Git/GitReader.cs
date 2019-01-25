@@ -11,6 +11,7 @@ namespace TimeTableLibrary.Helpers.Git
 {
 	public class GitReader: Abstracts.AbstractReader, Interfaces.IReader
 	{
+		public string Filename { get; set; }
 
 		private string DownloadCsv()
 		{
