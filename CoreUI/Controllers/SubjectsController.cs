@@ -7,6 +7,9 @@ using TimeTableLibrary.Extensions;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.RozkladRequests;
 using TimeTableLibrary.Helpers;
+using TimeTableLibrary.Helpers.Models;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.Extensions.Options;
 
 namespace CoreUI.Controllers
 {
@@ -16,11 +19,12 @@ namespace CoreUI.Controllers
 		RozkladClient rozkladClient;
 		MappingService service;
 
-		public SubjectsController(FpmClient fpmClient, RozkladClient rozkladClient, MappingService service)
+		public SubjectsController(FpmClient fpmClient, RozkladClient rozkladClient, MappingService service, IOptions<DefaultFiles> defaultFiles)
 		{
 			this.rozkladClient = rozkladClient;
 			this.fpmClient = fpmClient;
 			this.service = service;
+			service.LoadData(defaultFiles.Value);
 		}
 
 		public IActionResult Index()
@@ -37,8 +41,7 @@ namespace CoreUI.Controllers
 		[HttpPost]
 		public IActionResult SubjectsMapping(Dictionary<string,string> MappedSubjects)
 		{
-			
-
+			service.AddMappedSubjects(MappedSubjects);
 			return View();
 		}
 	}

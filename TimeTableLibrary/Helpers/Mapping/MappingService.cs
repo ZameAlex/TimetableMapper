@@ -10,6 +10,7 @@ using TimeTableLibrary.Extensions;
 using TimeTableLibrary.Helpers.Git;
 using TimeTableLibrary.Helpers.Interfaces;
 using TimeTableLibrary.Mappers.Interfaces;
+using TimeTableLibrary.Helpers.Models;
 
 namespace TimeTableLibrary.Helpers
 {
@@ -31,9 +32,7 @@ namespace TimeTableLibrary.Helpers
 		IMapper<string, FpmModels.FpmSubject> FSMapper,
 		IMapper<string, FpmModels.FpmTeacher> FTMapper,
 		IReader reader,
-		IWriter writer,
-		string startFilename= "subjects.csv",
-		string newFilename= "teachers.csv"
+		IWriter writer
 		)
 		{
 			this.RTMapper = RTMapper;
@@ -42,13 +41,19 @@ namespace TimeTableLibrary.Helpers
 			this.FTMapper = FTMapper;
 			Subjects = new Dictionary<RozkladModels.RozkladSubject, FpmModels.FpmSubject>();
 			Teachers = new Dictionary<RozkladModels.RozkladTeacher, FpmModels.FpmTeacher>();
-			reader.Filename = startFilename;
+			
+		}
+
+		public void LoadData(DefaultFiles files)
+		{
+			reader.Filename = files.Subject;
 			var SubjectsExistInMapping = reader.ParseMapping();
-			reader.Filename = newFilename;
+			reader.Filename = files.Teacher;
 			var TeachersExistInMapping = reader.ParseMapping();
 			AddMappedSubjects(SubjectsExistInMapping);
 			AddMappedTeachers(TeachersExistInMapping);
 		}
+
 		public void AddMappedTeachers(Dictionary<string,string> dictionary)
 		{
 			foreach (var item in dictionary)

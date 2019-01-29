@@ -19,6 +19,7 @@ using TimeTableLibrary.FpmModels;
 using TimeTableLibrary.Mappers.FpmMappers;
 using TimeTableLibrary.Helpers.Local;
 using TimeTableLibrary.Helpers.Interfaces;
+using TimeTableLibrary.Helpers.Models;
 
 namespace CoreUI
 {
@@ -40,7 +41,8 @@ namespace CoreUI
 				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
-
+			services.AddOptions();
+			services.Configure<DefaultFiles>(Configuration.GetSection("DefaultFiles"));
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			services.AddSingleton<FpmClient>();
 			services.AddSingleton<RozkladClient>();

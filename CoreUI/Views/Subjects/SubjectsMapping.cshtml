@@ -37,8 +37,9 @@
 		var i;
 		var ids = {};
 		for (i = 0; i <@Model.Count; i++) {
-			ids[$("#key_" + i).html()] = $("#" + i).val();
+			ids[$("#key_" + i).html()] = $("#groups option[value='" + $("#" + i).val() + "']").attr('id');
 		}
 		$.post("SubjectsMapping", { MappedSubjects: ids });
 	}
+
 </script>
