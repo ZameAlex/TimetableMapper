@@ -8,7 +8,7 @@ using TimeTableLibrary.FpmRequests;
 
 namespace CoreUI.Services.Implementation
 {
-	internal class SetTeacherService : SetService<FpmTeacher>
+	public class SetTeacherService : SetService<FpmTeacher>
 	{
 		public SetTeacherService(FpmClient client) : base(client)
 		{

@@ -19,7 +19,7 @@ namespace TimeTableLibrary.Extensions
 					var result = new KeyValuePair<string, string>
 					(
 					enumerator.Key.ToString(),
-					enumerator.Value.ToString() 
+					enumerator.Value.ToString()
 					);
 					enumerator.Reset();
 					return result;
@@ -29,7 +29,7 @@ namespace TimeTableLibrary.Extensions
 			enumerator.Reset();
 			return new KeyValuePair<string, string>();
 		}
-		public static void Add<TKey,TValue>(this IDictionary dictionary, Tuple<TKey, TValue> tuple)
+		public static void Add<TKey, TValue>(this IDictionary dictionary, Tuple<TKey, TValue> tuple)
 		{
 			dictionary.Add(tuple.Item1, tuple.Item2);
 		}
@@ -41,7 +41,7 @@ namespace TimeTableLibrary.Extensions
 
 		public static void AddIfNotExists<TKey, TValue>(this IDictionary dictionary, KeyValuePair<TKey, TValue> pair)
 		{
-			foreach(var item in dictionary.Keys)
+			foreach (var item in dictionary.Keys)
 			{
 				if (item.Equals(pair.Key))
 					return;
@@ -68,7 +68,7 @@ namespace TimeTableLibrary.Extensions
 		public static void AddNew<TKey, TValue>(this IDictionary dictionary, TKey key, TValue value)
 		{
 			dictionary.Remove(key);
-			dictionary.Add(key,value);
+			dictionary.Add(key, value);
 		}
 
 		public static string ConvertToString(this Dictionary<object, object> dictionary)
@@ -83,5 +83,25 @@ namespace TimeTableLibrary.Extensions
 			}
 			return builder.ToString();
 		}
+
+		public static Dictionary<string, string> ConvertToStringDictionary(this Dictionary<string, FpmModels.FpmSubject> dictionary)
+		{
+			var temp = new Dictionary<string, string>();
+			foreach (var item in dictionary)
+			{
+				temp.Add(item.Key, item.Value.Id);
+			}
+			return temp;
+		}
+		public static Dictionary<string, string> ConvertToStringDictionary(this Dictionary<string, FpmModels.FpmTeacher> dictionary)
+		{
+			var temp = new Dictionary<string, string>();
+			foreach (var item in dictionary)
+			{
+				temp.Add(item.Key, item.Value.Id);
+			}
+			return temp;
+		}
 	}
 }
+		

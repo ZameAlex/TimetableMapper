@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using TimeTableLibrary.FpmModels;
 using TimeTableLibrary.FpmRequests;
 
+
 namespace CoreUI.Services.Interfaces
 {
-	internal abstract class SetService<T>
+	public abstract class SetService<T>
 	{
 		private FpmClient client;
 		public SetService(FpmClient client)

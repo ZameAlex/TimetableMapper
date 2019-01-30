@@ -8,10 +8,8 @@ using TimeTableLibrary.FpmRequests;
 
 namespace CoreUI.Services.Implementation
 {
-	internal class SetSubjectsService:SetService<FpmGroup>
+	public class SetSubjectsService:SetService<FpmGroup>
 	{
-		private FpmClient client;
-
 		public SetSubjectsService(FpmClient client) : base(client)
 		{
 		}

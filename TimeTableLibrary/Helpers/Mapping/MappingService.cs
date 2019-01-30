@@ -16,36 +16,29 @@ namespace TimeTableLibrary.Helpers
 {
 	public class MappingService
 	{
-		public Dictionary<RozkladModels.RozkladSubject,FpmModels.FpmSubject> Subjects { get; protected set; }
-		public Dictionary<RozkladModels.RozkladTeacher,FpmModels.FpmTeacher> Teachers { get; protected set; }
+		public Dictionary<string, FpmModels.FpmSubject> Subjects { get; protected set; }
+		public Dictionary<string ,FpmModels.FpmTeacher> Teachers { get; protected set; }
 
-		IMapper<string,RozkladModels.RozkladSubject> RSMapper;
-		IMapper<string, RozkladModels.RozkladTeacher> RTMapper;
-		IMapper<string, FpmModels.FpmSubject> FSMapper;
-		IMapper<string, FpmModels.FpmTeacher> FTMapper;
+		RozkladClient rozkladClient;
+		FpmClient fpmClient;
 		IReader reader;
 		IWriter writer;
 
-		public MappingService(
-		IMapper<string, RozkladModels.RozkladSubject> RSMapper,
-		IMapper<string, RozkladModels.RozkladTeacher> RTMapper,
-		IMapper<string, FpmModels.FpmSubject> FSMapper,
-		IMapper<string, FpmModels.FpmTeacher> FTMapper,
-		IReader reader,
-		IWriter writer
-		)
+		private DefaultFiles files;
+
+		public MappingService(IReader reader, IWriter writer, RozkladClient rozkladClient, FpmClient fpmClient)
 		{
-			this.RTMapper = RTMapper;
-			this.FSMapper = FSMapper;
-			this.RSMapper = RSMapper;
-			this.FTMapper = FTMapper;
-			Subjects = new Dictionary<RozkladModels.RozkladSubject, FpmModels.FpmSubject>();
-			Teachers = new Dictionary<RozkladModels.RozkladTeacher, FpmModels.FpmTeacher>();
-			
+			this.fpmClient = fpmClient;
+			this.rozkladClient = rozkladClient;
+			Subjects = new Dictionary<string, FpmModels.FpmSubject>();
+			Teachers = new Dictionary<string, FpmModels.FpmTeacher>();
+			this.writer = writer;
+			this.reader = reader;
 		}
 
 		public void LoadData(DefaultFiles files)
 		{
+			this.files = files;
 			reader.Filename = files.Subject;
 			var SubjectsExistInMapping = reader.ParseMapping();
 			reader.Filename = files.Teacher;
@@ -58,7 +51,8 @@ namespace TimeTableLibrary.Helpers
 		{
 			foreach (var item in dictionary)
 			{
-				Teachers.AddIfNotExists(RTMapper.Map(item.Key), FTMapper.Map(item.Value));
+				Teachers.AddIfNotExists(rozkladClient.Teachers.SingleOrDefault(t=>t.Name==item.Key).Name, 
+				fpmClient.Teachers.SingleOrDefault(t=>t.Id==item.Value));
 			}
 		}
 
@@ -66,8 +60,17 @@ namespace TimeTableLibrary.Helpers
 		{
 			foreach (var item in dictionary)
 			{
-				Subjects.AddIfNotExists(RSMapper.Map(item.Key), FSMapper.Map(item.Value));
+				Subjects.AddIfNotExists(rozkladClient.Subjects.SingleOrDefault(s => s.Title == item.Key).Title,
+				fpmClient.Subjects.SingleOrDefault(s => s.Id == item.Value));
 			}
+		}
+
+		~MappingService()
+		{
+			writer.Filename = files.Subject;
+			writer.WriteMapping(Subjects.ConvertToStringDictionary());
+			writer.Filename = files.Teacher;
+			writer.WriteMapping(Teachers.ConvertToStringDictionary());
 		}
 	}
 }

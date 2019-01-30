@@ -19,7 +19,8 @@ namespace TimeTableLibrary.FpmRequests
 	{
 		private string sessionId;
 
-		private const string SUBJECTS_TEACHERS_FORM_NAME = "scheduler_groupToSubjectsForm";
+		private const string GROUP_TEACHERS_FORM_NAME = "scheduler_groupToSubjectsForm";
+		private const string SUBJECT_TEACHER_FORM_NAME = "scheduler_teacherToSubjectsForm";
 
 		public List<FpmGroup> Groups { get; set; }
 		public List<FpmSubject> Subjects { get; set; }
@@ -115,7 +116,7 @@ namespace TimeTableLibrary.FpmRequests
 					Id = option.Attributes["value"].Value.ToString()
 				});
 			}
-			Subjects = FormParsing(document.DocumentNode.SelectSingleNode($"//form[@name='{SUBJECTS_TEACHERS_FORM_NAME}']"));
+			Subjects = FormParsing(document.DocumentNode.SelectSingleNode($"//form[@name='{GROUP_TEACHERS_FORM_NAME}']"));
 		}
 
 		#endregion GetRequests
@@ -125,7 +126,7 @@ namespace TimeTableLibrary.FpmRequests
 		public async Task SetDependencies<T>(T dependency, List<FpmSubject> objects)
 		{
 			Dictionary<string, string> ids = new Dictionary<string, string>();
-			PreSetDependenciesRequests<T>(dependency);
+			await PreSetDependenciesRequests<T>(dependency);
 			if (dependency is FpmGroup)
 			{
 				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
@@ -208,9 +209,9 @@ namespace TimeTableLibrary.FpmRequests
 		private Tuple<string,string> GetLesson(bool first, Helpers.MappingService checker, ResultLesson lesson)
 		{
 			if (first)
-				return new Tuple<string,string>($"subject_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t.Title == lesson.FirstWeekLesson.Subject.Title)].Id);
+				return new Tuple<string,string>($"subject_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t == lesson.FirstWeekLesson.Subject.Title)].Id);
 			else
-				return new Tuple<string, string>($"subject_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t.Title == lesson.SecondWeekLesson.Subject.Title)].Id);
+				return new Tuple<string, string>($"subject_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t == lesson.SecondWeekLesson.Subject.Title)].Id);
 		}
 
 		private Tuple<string, string> GetRoom(bool first, Helpers.MappingService checker, ResultLesson lesson)
@@ -224,9 +225,9 @@ namespace TimeTableLibrary.FpmRequests
 		private Tuple<string, string> GetTeacher(bool first, Helpers.MappingService checker, ResultLesson lesson)
 		{
 			if (first)
-				return new Tuple<string, string>($"teacher_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Teachers[checker.Teachers.Keys.Single(t => t.Name == lesson.FirstWeekLesson.Teacher.Name)].Id);
+				return new Tuple<string, string>($"teacher_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Teachers[checker.Teachers.Keys.Single(t => t == lesson.FirstWeekLesson.Teacher.Name)].Id);
 			else
-				return new Tuple<string, string>($"teacher_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Teachers[checker.Teachers.Keys.Single(t => t.Name == lesson.SecondWeekLesson.Teacher.Name)].Id);
+				return new Tuple<string, string>($"teacher_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Teachers[checker.Teachers.Keys.Single(t => t == lesson.SecondWeekLesson.Teacher.Name)].Id);
 		}
 
 		private KeyValuePair<string,string> GetObjectForSetRequest<T>(T dependency)
@@ -256,10 +257,12 @@ namespace TimeTableLibrary.FpmRequests
 			client.SendAsync(message).Result.Content.ReadAsStringAsync();
 		}
 
-		private void PreSetDependenciesRequests<T>(T dependency)
+		private async Task<List<string>> PreSetDependenciesRequests<T>(T dependency)
 		{
+
 			SetHeaders();
 			Dictionary<string, string> ids = new Dictionary<string, string>();
+			string temp = SUBJECT_TEACHER_FORM_NAME;
 			if (dependency is FpmGroup)
 			{
 				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
@@ -268,6 +271,7 @@ namespace TimeTableLibrary.FpmRequests
 				{
 					GetObjectForSetRequest<FpmGroup>(dependency as FpmGroup)
 				});
+				temp = GROUP_TEACHERS_FORM_NAME;
 			}
 			else
 			{
@@ -278,7 +282,11 @@ namespace TimeTableLibrary.FpmRequests
 					GetObjectForSetRequest<FpmTeacher>(dependency as FpmTeacher)
 				});
 			}
-			client.SendAsync(message);
+			var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
+			var document = new HtmlDocument();
+			document.LoadHtml(response);
+			return ParseCheckedCheckboxes(document.DocumentNode.SelectSingleNode($"//form[@name='{temp}']"));
+		
 		}
 
 		#endregion RequestMethods
@@ -298,6 +306,18 @@ namespace TimeTableLibrary.FpmRequests
 					Name = childNodes.Last().ChildNodes[1].InnerText.Replace("&#39;", $"{(char)8216}")
 				};
 				result.Add(tempSubject);
+			}
+			return result;
+		}
+
+		private List<string> ParseCheckedCheckboxes(HtmlNode form)
+		{
+			var result = new List<string>();
+			var inputs = form.SelectNodes(@"//input[@type='checkbox']");
+			foreach (var item in inputs)
+			{
+				if (item.Attributes["checked"].Value == "true")
+					result.Add(item.Attributes["value"].Value);
 			}
 			return result;
 		}

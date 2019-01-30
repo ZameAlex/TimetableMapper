@@ -47,11 +47,9 @@ namespace TimeTableLibrary.RozkladRequests
 
 		}
 
-
-
 		private async Task InitRequest()
 		{
-			SetHeaders(message);
+			SetHeaders();
 			message.Headers.AddIfNotExists("Referer", "http://rozklad.kpi.ua");
 			message.Method = HttpMethod.Get;
 			message.RequestUri = new Uri("http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
@@ -64,8 +62,6 @@ namespace TimeTableLibrary.RozkladRequests
 				Timetable.AddIfNotExists(item.Attributes["name"].Value, item.Attributes["value"].Value);
 			}
 		}
-
-
 
 		public async Task<List<RozkladLesson>[]> GetTimetable()
 		{
@@ -80,7 +76,7 @@ namespace TimeTableLibrary.RozkladRequests
 			//Group selection
 			Timetable.AddNew("ctl00$MainContent$ctl00$txtboxGroup", Group);
 			message = new HttpRequestMessage();
-			SetHeaders(message);
+			SetHeaders();
 			message.Headers.AddIfNotExists("Referer", "http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
 			message.Method = HttpMethod.Post;
 			message.RequestUri = new Uri("http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
@@ -144,6 +140,25 @@ namespace TimeTableLibrary.RozkladRequests
 			return result;
 		}
 
+		public Dictionary<string,List<RozkladSubject>> GetTeachersBySubject()
+		{
+			var result = new Dictionary<string, List<RozkladSubject>>();
+			foreach (var item in Teachers)
+			{
+				result.Add(item.Name, new List<RozkladSubject>());
+			}
+			foreach (var item in rozkladTimeTable[0])
+			{
+				if (!result[item.Teacher.Name].Contains(item.Subject))
+					result[item.Teacher.Name].Add(item.Subject);
+			}
+			foreach (var item in rozkladTimeTable[1])
+			{
+				if (!result[item.Teacher.Name].Contains(item.Subject))
+					result[item.Teacher.Name].Add(item.Subject);
+			}
+			return result;
+		}
 		#endregion
 	}
 }
