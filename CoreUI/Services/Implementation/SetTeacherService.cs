@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TimeTableLibrary.FpmModels;
+using TimeTableLibrary.FpmRequests;
 
 namespace CoreUI.Services.Implementation
 {
-	internal class SetTeacherService : SetService<FpmTeacher, FpmSubject>
+	internal class SetTeacherService : SetService<FpmTeacher>
 	{
-		public void SetObjects(FpmTeacher dependence, List<FpmSubject> objects)
+		public SetTeacherService(FpmClient client) : base(client)
 		{
-			throw new NotImplementedException();
 		}
+
 	}
 }

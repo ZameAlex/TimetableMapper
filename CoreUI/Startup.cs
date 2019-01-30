@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TimeTableLibrary;
 using TimeTableLibrary.Helpers;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.RozkladRequests;
@@ -20,6 +15,8 @@ using TimeTableLibrary.Mappers.FpmMappers;
 using TimeTableLibrary.Helpers.Local;
 using TimeTableLibrary.Helpers.Interfaces;
 using TimeTableLibrary.Helpers.Models;
+using CoreUI.Services.Interfaces;
+using CoreUI.Services.Implementation;
 
 namespace CoreUI
 {
@@ -52,7 +49,8 @@ namespace CoreUI
 			services.AddSingleton<IMapper<string, FpmTeacher>, FpmTeacherMapper>();
 			services.AddSingleton<IReader, LocalReader>();
 			services.AddSingleton<IWriter, LocalWriter>();
-
+			services.AddSingleton<SetService<FpmGroup>, SetSubjectsService>();
+			services.AddSingleton<SetService<FpmTeacher>, SetTeacherService>();
 			services.AddSingleton<MappingService>();
 		}
 

@@ -6,19 +6,14 @@ using System.Threading.Tasks;
 using TimeTableLibrary.FpmModels;
 using TimeTableLibrary.FpmRequests;
 
-namespace CoreUI.Services
+namespace CoreUI.Services.Implementation
 {
-	internal class SetSubjectsService:SetService<FpmGroup,FpmSubject>
+	internal class SetSubjectsService:SetService<FpmGroup>
 	{
 		private FpmClient client;
-		public SetSubjectsService()
-		{
 
-		}
-
-		public void SetObjects(FpmGroup dependence, List<FpmSubject> objects)
+		public SetSubjectsService(FpmClient client) : base(client)
 		{
-			throw new NotImplementedException();
 		}
 	}
 }

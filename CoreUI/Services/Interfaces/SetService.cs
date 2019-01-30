@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeTableLibrary.FpmModels;
 using TimeTableLibrary.FpmRequests;
 
 namespace CoreUI.Services.Interfaces
 {
-	internal abstract class SetService<T,V>
+	internal abstract class SetService<T>
 	{
 		private FpmClient client;
 		public SetService(FpmClient client)
 		{
 			this.client = client;
 		}
-		public virtual void SetObjects (T dependence, List<V> objects)
+		public async virtual void SetObjects (T dependency, List<FpmSubject> objects)
 		{
-			client
+			await client.SetDependencies<T>(dependency, objects);
 		}
 	}
 }
