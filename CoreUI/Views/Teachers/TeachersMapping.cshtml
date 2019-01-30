@@ -1,0 +1,45 @@
+﻿@using TimeTableLibrary.Extensions; 
+@model List<string>
+@{
+	ViewData["Title"] = "TeachersMapping";
+}
+
+<h2 class="text-center">Teachers Mapping</h2>
+
+	<div class="form-horizontal">
+		<div class="form-group">
+			@for (int counter = 0; counter < Model.Count; counter++)
+			{
+			<div class="form-group row">
+				<div style="border:dotted; border-width:1px" >
+					<div class="col-lg-6">
+						<label class="col-xs-6" style="float: none; margin-top : 10px" asp-for="@Model[counter]" id="key_@counter">@Model[counter]</label>
+					</div>
+					<div class="col-lg-6">
+						<input list ="groups" class="col-xs-6" id="@counter" style="float: none; margin-top : 10px" type="text"/>
+						<datalist id="groups">
+							@foreach (var item in ViewBag.Teachers)
+							{
+								<option value=@item.Name id="@item.Id" />
+							}
+						</datalist>
+					</div>
+				</div>
+			</div>
+			}
+		</div>
+	</div>
+	<input type="submit" value="Save" class="btn btn-primary" onclick="Submit()"/>
+
+
+<script>
+	function Submit() {
+		var i;
+		var ids = {};
+		for (i = 0; i <@Model.Count; i++) {
+			ids[$("#key_" + i).html()] = $("#groups option[value='" + $("#" + i).val() + "']").attr('id');
+		}
+		$.post("TeachersMapping", { MappedTeachers: ids });
+	}
+
+</script>

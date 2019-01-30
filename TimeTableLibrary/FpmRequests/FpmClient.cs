@@ -61,7 +61,7 @@ namespace TimeTableLibrary.FpmRequests
 		{
 			DisableSafetySertificate();
 			message = new HttpRequestMessage();
-			SetHeaders(message);
+			SetHeaders();
 			message.RequestUri = new Uri("https://fpm.kpi.ua/login.do");
 			message.Method = HttpMethod.Post;
 			message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
@@ -84,7 +84,7 @@ namespace TimeTableLibrary.FpmRequests
 		public async Task SelectTeachers()
 		{
 			message = new HttpRequestMessage(HttpMethod.Get, "https://fpm.kpi.ua/scheduler/teachers/dependence/get_subjects.do");
-			SetHeaders(message);
+			SetHeaders();
 			var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
 			var document = new HtmlDocument();
 			document.LoadHtml(response);
@@ -102,7 +102,7 @@ namespace TimeTableLibrary.FpmRequests
 		public async Task SelectSubjectsAndGroups()
 		{
 			message = new HttpRequestMessage(HttpMethod.Get, "https://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
-			SetHeaders(message);
+			SetHeaders();
 			var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
 			var document = new HtmlDocument();
 			document.LoadHtml(response);
@@ -121,7 +121,28 @@ namespace TimeTableLibrary.FpmRequests
 		#endregion GetRequests
 
 		#region PostRequest
-		public async Task ClearRequest()
+
+		public async Task SetDependencies<T>(T dependency, List<FpmSubject> objects)
+		{
+			Dictionary<string, string> ids = new Dictionary<string, string>();
+			PreSetDependenciesRequests<T>(dependency);
+			if (dependency is FpmGroup)
+			{
+				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
+			}
+			else
+			{
+				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/teachers/dependence/get_subjects.do");
+			}
+			SetHeaders();
+			foreach (var item in objects)
+			{
+				ids.Add("ids", item.Id);
+			}
+			await client.SendAsync(message);
+		}
+
+		public async Task TimetableClearRequest()
 		{
 			PreChangingTimetableRequests();
 			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/savescheduler");
@@ -138,17 +159,17 @@ namespace TimeTableLibrary.FpmRequests
 				}
 			}
 			message.Content = new FormUrlEncodedContent(ids);
-			SetHeaders(message);
+			SetHeaders();
 			message.Headers.Add("Referer", $"http://fpm.kpi.ua/scheduler/edit.do?id="+CurrentGroup.Id);
 			Encoding.GetEncoding("windows-1251");
 			var response = await client.SendAsync(message);
 		}
 
-		public async Task SetRequest(List<ResultLesson> lessons, Helpers.MappingService checker)
+		public async Task SetTimetableRequest(List<ResultLesson> lessons, Helpers.MappingService checker)
 		{
 			PreChangingTimetableRequests();
 			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/savescheduler");
-			SetHeaders(message);
+			SetHeaders();
 			Dictionary<string,string> ids = new Dictionary<string, string>();
 			foreach (var item in lessons)
 			{
@@ -184,7 +205,7 @@ namespace TimeTableLibrary.FpmRequests
 		#region HelperMethods
 
 		#region CreatePostObjects
-		public Tuple<string,string> GetLesson(bool first, Helpers.MappingService checker, ResultLesson lesson)
+		private Tuple<string,string> GetLesson(bool first, Helpers.MappingService checker, ResultLesson lesson)
 		{
 			if (first)
 				return new Tuple<string,string>($"subject_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t.Title == lesson.FirstWeekLesson.Subject.Title)].Id);
@@ -192,7 +213,7 @@ namespace TimeTableLibrary.FpmRequests
 				return new Tuple<string, string>($"subject_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t.Title == lesson.SecondWeekLesson.Subject.Title)].Id);
 		}
 
-		public Tuple<string, string> GetRoom(bool first, Helpers.MappingService checker, ResultLesson lesson)
+		private Tuple<string, string> GetRoom(bool first, Helpers.MappingService checker, ResultLesson lesson)
 		{
 			if (first)
 				return new Tuple<string, string>($"room_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", lesson.FirstWeekLesson.LessonTypeAndRoom);
@@ -200,54 +221,30 @@ namespace TimeTableLibrary.FpmRequests
 				return new Tuple<string, string>($"room_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", lesson.SecondWeekLesson.LessonTypeAndRoom);
 		}
 
-		public Tuple<string, string> GetTeacher(bool first, Helpers.MappingService checker, ResultLesson lesson)
+		private Tuple<string, string> GetTeacher(bool first, Helpers.MappingService checker, ResultLesson lesson)
 		{
 			if (first)
 				return new Tuple<string, string>($"teacher_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Teachers[checker.Teachers.Keys.Single(t => t.Name == lesson.FirstWeekLesson.Teacher.Name)].Id);
 			else
 				return new Tuple<string, string>($"teacher_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Teachers[checker.Teachers.Keys.Single(t => t.Name == lesson.SecondWeekLesson.Teacher.Name)].Id);
 		}
+
+		private KeyValuePair<string,string> GetObjectForSetRequest<T>(T dependency)
+		{
+			if (dependency is FpmGroup)
+				return new KeyValuePair<string, string>("group_id", (dependency as FpmGroup).Id);
+			else
+				return new KeyValuePair<string, string>("teacher_id", (dependency as FpmTeacher).Id);
+		}
 		#endregion CreatePostObjects
 
 
 		#region RequestMethods
-		public async Task SetSubjectsToGroup(FpmGroup group, List<FpmSubject> subjects)
-		{
-			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/groups/dependence/save_subjects.do");
-			SetHeaders(message);
-			List<KeyValuePair<string, string>> ids = new List<KeyValuePair<string, string>>()
-			{
-				new KeyValuePair<string, string>("group_id",group.Id)
-			};
-			foreach (var item in subjects)
-			{
-				if (item != null)
-					ids.Add(new KeyValuePair<string, string>("ids", item.Id));
-			}
-			message.Content = new FormUrlEncodedContent(ids);
-			var response = await client.SendAsync(message);
-		}
-		public async Task SetTeacherToSubject(FpmTeacher teacher, List<FpmSubject> subjects)
-		{
-			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/teachers/dependence/save_subjects.do");
-			SetHeaders(message);
-			List<KeyValuePair<string, string>> ids = new List<KeyValuePair<string, string>>()
-			{
-				new KeyValuePair<string, string>("teacher_id",teacher.Id)
-			};
-			foreach (var item in subjects)
-			{
-				if (item != null)
-					ids.Add(new KeyValuePair<string, string>("ids", item.Id));
-			}
-			message.Content = new FormUrlEncodedContent(ids);
-			var response = await client.SendAsync(message);
-		}
 
 		public void PreChangingTimetableRequests()
 		{
 			message = new HttpRequestMessage(HttpMethod.Post, new Uri("http://fpm.kpi.ua/scheduler/group.do"));
-			SetHeaders(message);
+			SetHeaders();
 			message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
 			{
 				{"type", "group" },
@@ -255,9 +252,35 @@ namespace TimeTableLibrary.FpmRequests
 			});
 			client.SendAsync(message).Result.Content.ReadAsStringAsync();
 			message = new HttpRequestMessage(HttpMethod.Get, new Uri("http://fpm.kpi.ua/scheduler/edit.do?id=" + CurrentGroup.Id));
-			SetHeaders(message);
+			SetHeaders();
 			client.SendAsync(message).Result.Content.ReadAsStringAsync();
 		}
+
+		private void PreSetDependenciesRequests<T>(T dependency)
+		{
+			SetHeaders();
+			Dictionary<string, string> ids = new Dictionary<string, string>();
+			if (dependency is FpmGroup)
+			{
+				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
+				SetHeaders();
+				message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+				{
+					GetObjectForSetRequest<FpmGroup>(dependency as FpmGroup)
+				});
+			}
+			else
+			{
+				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/teachers/dependence/get_subjects.do");
+				SetHeaders();
+				message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+				{
+					GetObjectForSetRequest<FpmTeacher>(dependency as FpmTeacher)
+				});
+			}
+			client.SendAsync(message);
+		}
+
 		#endregion RequestMethods
 
 		private List<FpmSubject> FormParsing(HtmlNode form)

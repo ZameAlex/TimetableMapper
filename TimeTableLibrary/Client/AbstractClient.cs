@@ -27,7 +27,7 @@ namespace TimeTableLibrary.Client
 			headers = new Dictionary<string, string>();
 		} 
 
-		protected void SetHeaders(HttpRequestMessage message)
+		protected void SetHeaders()
 		{
 			foreach (var item in headers)
 				message.Headers.AddIfNotExists(item.Key, item.Value);
