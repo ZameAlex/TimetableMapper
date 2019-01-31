@@ -59,6 +59,7 @@ namespace CoreUI.Controllers
 			{
 				return new JsonResult("Error while loading data. Group isn`t exists, or timetable for this group isn`t avalaible.");
 			}
+			fpmClient.CurrentGroup = fpmClient.Groups.FirstOrDefault(group => group.Id == ID);
 			service.LoadData(defaultFiles);
 			return PartialView("_Menu");
 		}

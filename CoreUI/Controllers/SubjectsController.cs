@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using CoreUI.Services.Implementation;
 using CoreUI.Services.Interfaces;
 using TimeTableLibrary.FpmModels;
+using TimeTableLibrary.Mappers.Interfaces;
 
 namespace CoreUI.Controllers
 {
@@ -22,13 +23,15 @@ namespace CoreUI.Controllers
 		RozkladClient rozkladClient;
 		MappingService service;
 		SetService<FpmGroup> setService;
+		IMapper<string, FpmSubject> subjectMapper;
 
-		public SubjectsController(FpmClient fpmClient, RozkladClient rozkladClient, MappingService service, SetService<FpmGroup> setService)
+		public SubjectsController(FpmClient fpmClient, RozkladClient rozkladClient, MappingService service, SetService<FpmGroup> setService, IMapper<string, FpmSubject> subjectMapper)
 		{
 			this.rozkladClient = rozkladClient;
 			this.fpmClient = fpmClient;
 			this.service = service;
 			this.setService = setService;
+			this.subjectMapper = subjectMapper;
 		}
 
 		public IActionResult Index()
@@ -51,7 +54,7 @@ namespace CoreUI.Controllers
 
 		public IActionResult AddSubjectsForGroup()
 		{
-			setService.SetObjects(fpmClient.CurrentGroup, fpmClient.Subjects);
+			setService.SetObjects(fpmClient.CurrentGroup, subjectMapper.Map(rozkladClient.Subjects.Select(s => s.Title)).ToList());
 			return View();
 		}
 	}

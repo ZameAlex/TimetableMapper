@@ -125,22 +125,29 @@ namespace TimeTableLibrary.FpmRequests
 
 		public async Task SetDependencies<T>(T dependency, List<FpmSubject> objects)
 		{
-			Dictionary<string, string> ids = new Dictionary<string, string>();
-			await PreSetDependenciesRequests<T>(dependency);
+			List<KeyValuePair<string, string>> ids = new List<KeyValuePair<string, string>>();
+			var subjects = await PreSetDependenciesRequests<T>(dependency);
 			if (dependency is FpmGroup)
 			{
-				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
+				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/groups/dependence/save_subjects.do");
+				ids.Add(GetObjectForSetRequest<FpmGroup>(dependency as FpmGroup));
 			}
 			else
 			{
-				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/teachers/dependence/get_subjects.do");
+				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/teachers/dependence/save_subjects.do");
+				ids.Add(GetObjectForSetRequest<FpmTeacher>(dependency as FpmTeacher));
 			}
 			SetHeaders();
 			foreach (var item in objects)
 			{
-				ids.Add("ids", item.Id);
+				ids.AddIfNotExists(new KeyValuePair<string, string>("ids", item.Id));
 			}
-			await client.SendAsync(message);
+			foreach (var item in subjects)
+			{
+				ids.AddIfNotExists(new KeyValuePair<string, string>("ids", item));
+			}
+			message.Content = new FormUrlEncodedContent(ids);
+			var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
 		}
 
 		public async Task TimetableClearRequest()
@@ -262,7 +269,6 @@ namespace TimeTableLibrary.FpmRequests
 
 			SetHeaders();
 			Dictionary<string, string> ids = new Dictionary<string, string>();
-			string temp = SUBJECT_TEACHER_FORM_NAME;
 			if (dependency is FpmGroup)
 			{
 				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
@@ -271,7 +277,6 @@ namespace TimeTableLibrary.FpmRequests
 				{
 					GetObjectForSetRequest<FpmGroup>(dependency as FpmGroup)
 				});
-				temp = GROUP_TEACHERS_FORM_NAME;
 			}
 			else
 			{
@@ -283,10 +288,7 @@ namespace TimeTableLibrary.FpmRequests
 				});
 			}
 			var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
-			var document = new HtmlDocument();
-			document.LoadHtml(response);
-			return ParseCheckedCheckboxes(document.DocumentNode.SelectSingleNode($"//form[@name='{temp}']"));
-		
+			return ParseCheckedCheckboxes(response);
 		}
 
 		#endregion RequestMethods
@@ -310,14 +312,19 @@ namespace TimeTableLibrary.FpmRequests
 			return result;
 		}
 
-		private List<string> ParseCheckedCheckboxes(HtmlNode form)
+		private List<string> ParseCheckedCheckboxes(string html)
 		{
 			var result = new List<string>();
-			var inputs = form.SelectNodes(@"//input[@type='checkbox']");
-			foreach (var item in inputs)
+			var index = html.IndexOf("t_subj_ids");
+			var i = index;
+			for (; html[i] != '\n'; i++)
 			{
-				if (item.Attributes["checked"].Value == "true")
-					result.Add(item.Attributes["value"].Value);
+			}
+			var ids = html.Substring(index, i - index).Split('\'');
+			foreach (var item in ids)
+			{
+				if (item.IndexOf("sbj_") != -1)
+					result.Add(item);
 			}
 			return result;
 		}
