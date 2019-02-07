@@ -129,12 +129,12 @@ namespace TimeTableLibrary.FpmRequests
 			var subjects = await PreSetDependenciesRequests<T>(dependency);
 			if (dependency is FpmGroup)
 			{
-				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/groups/dependence/save_subjects.do");
+				message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/groups/dependence/save_subjects.do");
 				ids.Add(GetObjectForSetRequest<FpmGroup>(dependency as FpmGroup));
 			}
 			else
 			{
-				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/teachers/dependence/save_subjects.do");
+				message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/teachers/dependence/save_subjects.do");
 				ids.Add(GetObjectForSetRequest<FpmTeacher>(dependency as FpmTeacher));
 			}
 			SetHeaders();
@@ -147,7 +147,10 @@ namespace TimeTableLibrary.FpmRequests
 				ids.AddIfNotExists(new KeyValuePair<string, string>("ids", item));
 			}
 			message.Content = new FormUrlEncodedContent(ids);
+			message.Headers.AddIfNotExists("Referer", "https://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
 			var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
+			message = new HttpRequestMessage(HttpMethod.Get, "https://fpm.kpi.ua/_includes/blank_page.jsp");
+			await client.SendAsync(message);
 		}
 
 		public async Task TimetableClearRequest()
@@ -168,7 +171,7 @@ namespace TimeTableLibrary.FpmRequests
 			}
 			message.Content = new FormUrlEncodedContent(ids);
 			SetHeaders();
-			message.Headers.Add("Referer", $"http://fpm.kpi.ua/scheduler/edit.do?id="+CurrentGroup.Id);
+			message.Headers.Add("Referer", $"https://fpm.kpi.ua/scheduler/edit.do?id="+CurrentGroup.Id);
 			Encoding.GetEncoding("windows-1251");
 			var response = await client.SendAsync(message);
 		}
@@ -271,24 +274,32 @@ namespace TimeTableLibrary.FpmRequests
 			Dictionary<string, string> ids = new Dictionary<string, string>();
 			if (dependency is FpmGroup)
 			{
-				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
+				message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do");
 				SetHeaders();
 				message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
 				{
 					GetObjectForSetRequest<FpmGroup>(dependency as FpmGroup)
 				});
+				var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
+				message = new HttpRequestMessage(HttpMethod.Get, "https://fpm.kpi.ua/_includes/blank_page.jsp");
+				await client.SendAsync(message);
+				return new List<string>();
 			}
 			else
 			{
-				message = new HttpRequestMessage(HttpMethod.Post, "http://fpm.kpi.ua/scheduler/teachers/dependence/get_subjects.do");
+				message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/teachers/dependence/get_subjects.do");
 				SetHeaders();
 				message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
 				{
 					GetObjectForSetRequest<FpmTeacher>(dependency as FpmTeacher)
 				});
+				var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
+				message = new HttpRequestMessage(HttpMethod.Get, "https://fpm.kpi.ua/_includes/blank_page.jsp");
+				await client.SendAsync(message);
+				return ParseCheckedCheckboxes(response);
 			}
-			var response = await client.SendAsync(message).Result.Content.ReadAsStringAsync();
-			return ParseCheckedCheckboxes(response);
+			
+			
 		}
 
 		#endregion RequestMethods

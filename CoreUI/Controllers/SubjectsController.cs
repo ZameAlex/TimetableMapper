@@ -55,7 +55,7 @@ namespace CoreUI.Controllers
 		public IActionResult AddSubjectsForGroup()
 		{
 			setService.SetObjects(fpmClient.CurrentGroup, subjectMapper.Map(rozkladClient.Subjects.Select(s => s.Title)).ToList());
-			return View();
+			return View("Index");
 		}
 	}
 }
