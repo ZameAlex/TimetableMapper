@@ -92,14 +92,14 @@ namespace TimeTableLibrary.RozkladRequests
 			{
 				if (!Teachers.Exists(t => t.Name == item.Teacher.Name))
 					Teachers.Add(item.Teacher);
-				if (!Subjects.Exists(t => t.Name == item.Subject.Title))
+				if (!Subjects.Exists(t => t.Title == item.Subject.Title))
 					Subjects.Add(item.Subject);
 			}
 			foreach (var item in result[1])
 			{
 				if (!Teachers.Exists(t => t.Name == item.Teacher.Name))
 					Teachers.Add(item.Teacher);
-				if (!Subjects.Exists(t => t.Name == item.Subject.Title))
+				if (!Subjects.Exists(t => t.Title == item.Subject.Title))
 					Subjects.Add(item.Subject);
 			}
 			rozkladTimeTable = result;

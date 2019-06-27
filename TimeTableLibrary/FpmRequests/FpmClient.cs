@@ -34,10 +34,10 @@ namespace TimeTableLibrary.FpmRequests
 			Groups = new List<FpmGroup>();
 			Subjects = new List<FpmSubject>();
 			Teachers = new List<FpmTeacher>();
-			headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
-			headers.Add("Accept-Encoding", "gzip, deflate");
-			headers.Add("Accept-Language", "uk-UA,uk;q=0.9,ru;q=0.8,en-US;q=0.7,en;q=0.6");
-			headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
+			headers.AddIfNotExists("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+			headers.AddIfNotExists("Accept-Encoding", "gzip, deflate");
+			headers.AddIfNotExists("Accept-Language", "uk-UA,uk;q=0.9,ru;q=0.8,en-US;q=0.7,en;q=0.6");
+			headers.AddIfNotExists("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
 		}
 
 		#region GetRequests
@@ -130,12 +130,12 @@ namespace TimeTableLibrary.FpmRequests
 			if (dependency is FpmGroup)
 			{
 				message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/groups/dependence/save_subjects.do");
-				ids.Add(GetObjectForSetRequest<FpmGroup>(dependency as FpmGroup));
+				ids.AddIfNotExists(GetObjectForSetRequest<FpmGroup>(dependency as FpmGroup));
 			}
 			else
 			{
 				message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/scheduler/teachers/dependence/save_subjects.do");
-				ids.Add(GetObjectForSetRequest<FpmTeacher>(dependency as FpmTeacher));
+				ids.AddIfNotExists(GetObjectForSetRequest<FpmTeacher>(dependency as FpmTeacher));
 			}
 			SetHeaders();
 			foreach (var item in objects)
@@ -164,14 +164,14 @@ namespace TimeTableLibrary.FpmRequests
 				{
 					for (int i = 1; i < 3; i++)
 					{
-						ids.Add($"subject_{i}_{j}_{k}", "");
-						ids.Add($"room_{i}_{j}_{k}", "");
+						ids.AddIfNotExists($"subject_{i}_{j}_{k}", "");
+						ids.AddIfNotExists($"room_{i}_{j}_{k}", "");
 					}
 				}
 			}
 			message.Content = new FormUrlEncodedContent(ids);
 			SetHeaders();
-			message.Headers.Add("Referer", $"https://fpm.kpi.ua/scheduler/edit.do?id="+CurrentGroup.Id);
+			message.Headers.AddIfNotExists("Referer", $"https://fpm.kpi.ua/scheduler/edit.do?id="+CurrentGroup.Id);
 			Encoding.GetEncoding("windows-1251");
 			var response = await client.SendAsync(message);
 		}
@@ -192,7 +192,7 @@ namespace TimeTableLibrary.FpmRequests
 						ids.Add(GetTeacher(true, checker, item));
 						ids.Add(GetRoom(true, checker, item));
 					}
-					ids.Add($"week_{(int)item.LessonNumber - 1}_{(int)item.DayOfWeek}", "on");
+					ids.AddIfNotExists($"week_{(int)item.LessonNumber - 1}_{(int)item.DayOfWeek}", "on");
 					if(item.SecondWeekLesson!=null)
 					{
 						ids.Add(GetLesson(false, checker, item));

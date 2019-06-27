@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Timetable\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TimeTableLibrary\TimeTableLibrary.csproj" />
   </ItemGroup>
 
@@ -23,6 +19,9 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Subjects\SubjectsMapping.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Timetable\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

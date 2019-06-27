@@ -19,7 +19,7 @@ namespace ConsoleTimetableMapper
 			RozkladClient client = new RozkladClient();
 			client.Group = groupName;
 			var observer = new ExampleDiagnosticObserver();
-			IDisposable subscription = DiagnosticListener.AllListeners.Subscribe(observer);
+			//IDisposable subscription = DiagnosticListener.AllListeners.Subscribe(observer);
 			var rozkladLessons = client.GetTimetable().Result;
 			var rzkSubjects = rozkladLessons[0].Select(r => r.Subject).Union(rozkladLessons[1].Select(r => r.Subject)).ToList();
 			FpmClient fpmClient = new FpmClient();

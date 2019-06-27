@@ -17,6 +17,7 @@ using TimeTableLibrary.Helpers.Interfaces;
 using TimeTableLibrary.Helpers.Models;
 using CoreUI.Services.Interfaces;
 using CoreUI.Services.Implementation;
+using TimeTableLibrary.Mappers;
 
 namespace CoreUI
 {
@@ -52,6 +53,7 @@ namespace CoreUI
 			services.AddSingleton<SetService<FpmGroup>, SetSubjectsService>();
 			services.AddSingleton<SetService<FpmTeacher>, SetTeacherService>();
 			services.AddSingleton<MappingService>();
+			services.AddSingleton<ResultLessonsMapper>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

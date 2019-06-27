@@ -1,0 +1,4 @@
+GET https://fpm.kpi.ua/_includes/blank_page.jsp HTTP/1.1
+Cookie: JSESSIONID=FB26C5A3DA27C15BEE70CBE339BF1DD4
+Host: fpm.kpi.ua
+
