@@ -97,12 +97,12 @@ namespace SimpleUI
 
 		private void EnablingChanges()
 		{
-			if (checker.IsObjectsMapped(true) && checker.IsObjectsMapped(false))
-			{
+			//if (checker.IsObjectsMapped(true) && checker.IsObjectsMapped(false))
+			//{
 				MapTimetable.Enabled = true;
 				MapSubjects.Enabled = false;
 				MapTeachers.Enabled = false;
-			}
+			//}
 		}
 	}
 }
