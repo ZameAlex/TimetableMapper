@@ -12,9 +12,6 @@ using TimeTableLibrary.RozkladModels;
 using TimeTableLibrary.Mappers.RozkladMappers;
 using TimeTableLibrary.FpmModels;
 using TimeTableLibrary.Mappers.FpmMappers;
-using TimeTableLibrary.Helpers.Local;
-using TimeTableLibrary.Helpers.Interfaces;
-using TimeTableLibrary.Helpers.Models;
 using CoreUI.Services.Interfaces;
 using CoreUI.Services.Implementation;
 using TimeTableLibrary.Mappers;
@@ -40,7 +37,6 @@ namespace CoreUI
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 			services.AddOptions();
-			services.Configure<DefaultFiles>(Configuration.GetSection("DefaultFiles"));
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			services.AddSingleton<FpmClient>();
 			services.AddSingleton<RozkladClient>();
@@ -48,8 +44,6 @@ namespace CoreUI
 			services.AddSingleton<IMapper<string, RozkladTeacher>, RozkladTeacherMapper>();
 			services.AddSingleton<IMapper<string, FpmSubject>, FpmSubjectMapper>();
 			services.AddSingleton<IMapper<string, FpmTeacher>, FpmTeacherMapper>();
-			services.AddSingleton<IReader, LocalReader>();
-			services.AddSingleton<IWriter, LocalWriter>();
 			services.AddSingleton<SetService<FpmGroup>, SetSubjectsService>();
 			services.AddSingleton<SetService<FpmTeacher>, SetTeacherService>();
 			services.AddSingleton<MappingService>();

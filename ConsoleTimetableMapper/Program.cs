@@ -6,7 +6,6 @@ using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.Helpers.JsonHelper;
 using TimeTableLibrary.Mappers;
 using TimeTableLibrary.RozkladRequests;
-using TimeTableLibrary.Helpers.Git;
 
 namespace ConsoleTimetableMapper
 {

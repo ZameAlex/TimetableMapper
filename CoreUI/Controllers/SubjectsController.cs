@@ -7,7 +7,6 @@ using TimeTableLibrary.Extensions;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.RozkladRequests;
 using TimeTableLibrary.Helpers;
-using TimeTableLibrary.Helpers.Models;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Options;
 using CoreUI.Services.Implementation;
@@ -48,7 +47,6 @@ namespace CoreUI.Controllers
 		[HttpPost]
 		public IActionResult SubjectsMapping(Dictionary<string,string> MappedSubjects)
 		{
-			service.AddMappedSubjects(MappedSubjects);
 			return View();
 		}
 

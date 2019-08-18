@@ -9,7 +9,6 @@ using TimeTableLibrary.FpmModels;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.RozkladRequests;
 using TimeTableLibrary.Helpers;
-using TimeTableLibrary.Helpers.Models;
 using Microsoft.Extensions.Options;
 
 namespace CoreUI.Controllers
@@ -20,14 +19,12 @@ namespace CoreUI.Controllers
 		FpmClient fpmClient;
 		RozkladClient rozkladClient;
 		MappingService service;
-		DefaultFiles defaultFiles;
 
-		public HomeController(FpmClient fpmClient, RozkladClient rozkladClient, MappingService service, IOptions<DefaultFiles> defaultFiles)
+		public HomeController(FpmClient fpmClient, RozkladClient rozkladClient, MappingService service)
 		{
 			this.fpmClient = fpmClient;
 			this.rozkladClient = rozkladClient;
 			this.service = service;
-			this.defaultFiles = defaultFiles.Value;
 		}
 
 		[HttpGet]
@@ -60,7 +57,6 @@ namespace CoreUI.Controllers
 				return new JsonResult("Error while loading data. Group isn`t exists, or timetable for this group isn`t avalaible.");
 			}
 			fpmClient.CurrentGroup = fpmClient.Groups.FirstOrDefault(group => group.Id == ID);
-			service.LoadData(defaultFiles);
 			return PartialView("_Menu");
 		}
 	}

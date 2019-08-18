@@ -17,10 +17,17 @@ namespace TimeTableLibrary.FpmRequests
 {
 	public class FpmClient : AbstractClient
 	{
-		private string sessionId;
+		private string _sessionId;
 
-		private const string GROUP_TEACHERS_FORM_NAME = "scheduler_groupToSubjectsForm";
-		private const string SUBJECT_TEACHER_FORM_NAME = "scheduler_teacherToSubjectsForm";
+		private const string GroupTeachersFormName = "scheduler_groupToSubjectsForm";
+		private const string SubjectTeacherFormName = "scheduler_teacherToSubjectsForm";
+
+		private static FpmClient _instance;
+
+		public static FpmClient Instance
+		{
+			get { return _instance ?? (_instance = new FpmClient()); }
+		}
 
 		public List<FpmGroup> Groups { get; set; }
 		public List<FpmSubject> Subjects { get; set; }
@@ -28,7 +35,7 @@ namespace TimeTableLibrary.FpmRequests
 		public FpmGroup CurrentGroup { get; set; }
 		public FpmUser User { get; set; }
 
-		public FpmClient() : base()
+		private FpmClient() : base()
 		{
 			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 			Groups = new List<FpmGroup>();
@@ -53,11 +60,11 @@ namespace TimeTableLibrary.FpmRequests
 			{
 				return;
 			}
-			sessionId = message.RequestUri.ToString().Split('=').Last();
-			headers.AddIfNotExists("Cookie", $"JSESSIONID={sessionId}");
+			_sessionId = message.RequestUri.ToString().Split('=').Last();
+			headers.AddIfNotExists("Cookie", $"JSESSIONID={_sessionId}");
 		}
 
-		
+
 		public async Task Login()
 		{
 			DisableSafetySertificate();
@@ -75,13 +82,13 @@ namespace TimeTableLibrary.FpmRequests
 			{
 				var response = await client.SendAsync(message);
 			}
-			catch(InvalidOperationException e)
+			catch (InvalidOperationException e)
 			{
 				return;
 			}
 		}
 
-		
+
 		public async Task SelectTeachers()
 		{
 			message = new HttpRequestMessage(HttpMethod.Get, "https://fpm.kpi.ua/scheduler/teachers/dependence/get_subjects.do");
@@ -116,7 +123,7 @@ namespace TimeTableLibrary.FpmRequests
 					Id = option.Attributes["value"].Value.ToString()
 				});
 			}
-			Subjects = FormParsing(document.DocumentNode.SelectSingleNode($"//form[@name='{GROUP_TEACHERS_FORM_NAME}']"));
+			Subjects = FormParsing(document.DocumentNode.SelectSingleNode($"//form[@name='{GroupTeachersFormName}']"));
 		}
 
 		#endregion GetRequests
@@ -157,7 +164,7 @@ namespace TimeTableLibrary.FpmRequests
 		{
 			PreChangingTimetableRequests();
 			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/savescheduler");
-			Dictionary<string,string> ids = new Dictionary<string, string>();
+			Dictionary<string, string> ids = new Dictionary<string, string>();
 			for (int j = 0; j < 6; j++)
 			{
 				for (int k = 0; k < 6; k++)
@@ -171,7 +178,7 @@ namespace TimeTableLibrary.FpmRequests
 			}
 			message.Content = new FormUrlEncodedContent(ids);
 			SetHeaders();
-			message.Headers.AddIfNotExists("Referer", $"https://fpm.kpi.ua/scheduler/edit.do?id="+CurrentGroup.Id);
+			message.Headers.AddIfNotExists("Referer", $"https://fpm.kpi.ua/scheduler/edit.do?id=" + CurrentGroup.Id);
 			Encoding.GetEncoding("windows-1251");
 			var response = await client.SendAsync(message);
 		}
@@ -181,30 +188,30 @@ namespace TimeTableLibrary.FpmRequests
 			PreChangingTimetableRequests();
 			message = new HttpRequestMessage(HttpMethod.Post, "https://fpm.kpi.ua/savescheduler");
 			SetHeaders();
-			Dictionary<string,string> ids = new Dictionary<string, string>();
+			Dictionary<string, string> ids = new Dictionary<string, string>();
 			foreach (var item in lessons)
 			{
 				if (item.Flasher)
 				{
-					if(item.FirstWeekLesson!=null)
+					if (item.FirstWeekLesson != null)
 					{
 						ids.Add(GetLesson(true, checker, item));
 						ids.Add(GetTeacher(true, checker, item));
 						ids.Add(GetRoom(true, checker, item));
 					}
 					ids.AddIfNotExists($"week_{(int)item.LessonNumber - 1}_{(int)item.DayOfWeek}", "on");
-					if(item.SecondWeekLesson!=null)
+					if (item.SecondWeekLesson != null)
 					{
 						ids.Add(GetLesson(false, checker, item));
 						ids.Add(GetTeacher(false, checker, item));
 						ids.Add(GetRoom(false, checker, item));
 					}
 				}
-				else if(item.FirstWeekLesson==item.SecondWeekLesson && item.FirstWeekLesson != null)
+				else if (item.FirstWeekLesson == item.SecondWeekLesson && item.FirstWeekLesson != null)
 				{
-						ids.Add(GetLesson(true, checker, item));
-						ids.Add(GetTeacher(true, checker, item));
-						ids.Add(GetRoom(true, checker, item));
+					ids.Add(GetLesson(true, checker, item));
+					ids.Add(GetTeacher(true, checker, item));
+					ids.Add(GetRoom(true, checker, item));
 				}
 			}
 			Encoding.GetEncoding("windows-1251");
@@ -216,10 +223,10 @@ namespace TimeTableLibrary.FpmRequests
 		#region HelperMethods
 
 		#region CreatePostObjects
-		private Tuple<string,string> GetLesson(bool first, Helpers.MappingService checker, ResultLesson lesson)
+		private Tuple<string, string> GetLesson(bool first, Helpers.MappingService checker, ResultLesson lesson)
 		{
 			if (first)
-				return new Tuple<string,string>($"subject_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t == lesson.FirstWeekLesson.Subject.Title)].Id);
+				return new Tuple<string, string>($"subject_1_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t == lesson.FirstWeekLesson.Subject.Title)].Id);
 			else
 				return new Tuple<string, string>($"subject_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Subjects[checker.Subjects.Keys.Single(t => t == lesson.SecondWeekLesson.Subject.Title)].Id);
 		}
@@ -240,7 +247,7 @@ namespace TimeTableLibrary.FpmRequests
 				return new Tuple<string, string>($"teacher_2_{(int)lesson.LessonNumber - 1}_{(int)lesson.DayOfWeek}", checker.Teachers[checker.Teachers.Keys.Single(t => t == lesson.SecondWeekLesson.Teacher.Name)].Id);
 		}
 
-		private KeyValuePair<string,string> GetObjectForSetRequest<T>(T dependency)
+		private KeyValuePair<string, string> GetObjectForSetRequest<T>(T dependency)
 		{
 			if (dependency is FpmGroup)
 				return new KeyValuePair<string, string>("group_id", (dependency as FpmGroup).Id);
@@ -298,8 +305,8 @@ namespace TimeTableLibrary.FpmRequests
 				await client.SendAsync(message);
 				return ParseCheckedCheckboxes(response);
 			}
-			
-			
+
+
 		}
 
 		#endregion RequestMethods
@@ -348,7 +355,8 @@ namespace TimeTableLibrary.FpmRequests
 					X509Certificate certificate,
 					X509Chain chain,
 					SslPolicyErrors sslPolicyErrors
-				) {
+				)
+				{
 					return true;
 				};
 
