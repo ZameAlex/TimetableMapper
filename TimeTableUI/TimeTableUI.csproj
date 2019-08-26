@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TimeTableLibrary\TimeTableLibrary.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Models\TimeTableModels\" />
     <Folder Include="Views\SubjectsGroupsLinking\" />
     <Folder Include="Views\TeachersSubjectsLinking\" />

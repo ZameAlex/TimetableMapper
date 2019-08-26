@@ -74,11 +74,5 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TimeTableLibrary\TimeTableLibrary.csproj">
-      <Project>{7f0f1089-b770-40cf-9de1-61dfe9864bf2}</Project>
-      <Name>TimeTableLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
