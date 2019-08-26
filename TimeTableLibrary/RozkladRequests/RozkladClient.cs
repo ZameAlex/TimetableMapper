@@ -8,7 +8,6 @@ using HtmlAgilityPack;
 using TimeTableLibrary.Client;
 using TimeTableLibrary.RozkladModels;
 using TimeTableLibrary.Enums;
-using ConsoleTimetableMapper;
 using System.Diagnostics;
 using TimeTableLibrary.Extensions;
 
@@ -16,15 +15,22 @@ namespace TimeTableLibrary.RozkladRequests
 {
 	public class RozkladClient : AbstractClient
 	{
-		private const string FIRST_WEEK = "ctl00_MainContent_FirstScheduleTable";
-		private const string SECOND_WEEK = "ctl00_MainContent_SecondScheduleTable";
+		private const string FirstWeek = "ctl00_MainContent_FirstScheduleTable";
+		private const string SecondWeek = "ctl00_MainContent_SecondScheduleTable";
+
+		private static RozkladClient _instance;
+
+		public static RozkladClient Instance
+		{
+			get { return _instance ?? (_instance = new RozkladClient()); }
+		}
+
 		public string Group { get; set; }
-		public List<RozkladLesson>[] rozkladTimeTable {get;set;}
+		public List<RozkladLesson>[] RozkladTimeTable { get; set; }
 		public List<RozkladSubject> Subjects { get; set; }
 		public List<RozkladTeacher> Teachers { get; set; }
 
-		#region GetRequests
-		public RozkladClient()
+		private RozkladClient()
 		{
 			//var observer = new ExampleDiagnosticObserver();
 			//IDisposable subscription = DiagnosticListener.AllListeners.Subscribe(observer);
@@ -47,11 +53,11 @@ namespace TimeTableLibrary.RozkladRequests
 
 		}
 
-
+		#region GetRequests
 
 		private async Task InitRequest()
 		{
-			SetHeaders(message);
+			SetHeaders();
 			message.Headers.AddIfNotExists("Referer", "http://rozklad.kpi.ua");
 			message.Method = HttpMethod.Get;
 			message.RequestUri = new Uri("http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
@@ -65,22 +71,20 @@ namespace TimeTableLibrary.RozkladRequests
 			}
 		}
 
-
-
 		public async Task<List<RozkladLesson>[]> GetTimetable()
 		{
 			try
 			{
 				await InitRequest();
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 
 			}
 			//Group selection
 			Timetable.AddNew("ctl00$MainContent$ctl00$txtboxGroup", Group);
 			message = new HttpRequestMessage();
-			SetHeaders(message);
+			SetHeaders();
 			message.Headers.AddIfNotExists("Referer", "http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
 			message.Method = HttpMethod.Post;
 			message.RequestUri = new Uri("http://rozklad.kpi.ua/Schedules/ScheduleGroupSelection.aspx");
@@ -90,23 +94,23 @@ namespace TimeTableLibrary.RozkladRequests
 			var document = new HtmlDocument();
 			document.LoadHtml(response);
 			var result = new List<RozkladLesson>[2];
-			result[0] = ParseTable(document.DocumentNode.SelectSingleNode($@"//table[@id='{FIRST_WEEK}']"), true);
-			result[1] = ParseTable(document.DocumentNode.SelectSingleNode($@"//table[@id='{SECOND_WEEK}']"), false);
-			foreach(var item in result[0])
+			result[0] = ParseTable(document.DocumentNode.SelectSingleNode($@"//table[@id='{FirstWeek}']"), true);
+			result[1] = ParseTable(document.DocumentNode.SelectSingleNode($@"//table[@id='{SecondWeek}']"), false);
+			foreach (var item in result[0])
 			{
 				if (!Teachers.Exists(t => t.Name == item.Teacher.Name))
 					Teachers.Add(item.Teacher);
-				if (!Subjects.Exists(t => t.Name == item.Subject.Title))
+				if (!Subjects.Exists(t => t.Title == item.Subject.Title))
 					Subjects.Add(item.Subject);
 			}
 			foreach (var item in result[1])
 			{
 				if (!Teachers.Exists(t => t.Name == item.Teacher.Name))
 					Teachers.Add(item.Teacher);
-				if (!Subjects.Exists(t => t.Name == item.Subject.Title))
+				if (!Subjects.Exists(t => t.Title == item.Subject.Title))
 					Subjects.Add(item.Subject);
 			}
-			rozkladTimeTable = result;
+			RozkladTimeTable = result;
 			return result;
 		}
 		#endregion GetRequests
@@ -144,6 +148,25 @@ namespace TimeTableLibrary.RozkladRequests
 			return result;
 		}
 
+		public Dictionary<string, List<RozkladSubject>> GetTeachersBySubject()
+		{
+			var result = new Dictionary<string, List<RozkladSubject>>();
+			foreach (var item in Teachers)
+			{
+				result.Add(item.Name, new List<RozkladSubject>());
+			}
+			foreach (var item in RozkladTimeTable[0])
+			{
+				if (!result[item.Teacher.Name].Contains(item.Subject))
+					result[item.Teacher.Name].Add(item.Subject);
+			}
+			foreach (var item in RozkladTimeTable[1])
+			{
+				if (!result[item.Teacher.Name].Contains(item.Subject))
+					result[item.Teacher.Name].Add(item.Subject);
+			}
+			return result;
+		}
 		#endregion
 	}
 }

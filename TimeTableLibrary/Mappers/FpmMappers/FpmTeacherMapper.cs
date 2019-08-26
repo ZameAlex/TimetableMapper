@@ -2,21 +2,22 @@
 using System.Linq;
 using TimeTableLibrary.FpmModels;
 using TimeTableLibrary.FpmRequests;
+using TimeTableLibrary.Helpers;
 using TimeTableLibrary.Mappers.Interfaces;
 
 namespace TimeTableLibrary.Mappers.FpmMappers
 {
 	public class FpmTeacherMapper : IMapper<string, FpmTeacher>
 	{
-		FpmClient client;
-		public FpmTeacherMapper(FpmClient client)
+		MappingService service;
+		public FpmTeacherMapper(MappingService service)
 		{
-			this.client = client;
+			this.service = service;
 		}
 
 		public FpmTeacher Map(string obj)
 		{
-			return client.Teachers.SingleOrDefault(t=>t.Name==obj);
+			return service.Teachers[obj];
 		}
 
 		public IEnumerable<FpmTeacher> Map(IEnumerable<string> objs)

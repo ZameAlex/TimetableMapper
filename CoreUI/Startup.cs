@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TimeTableLibrary;
-using TimeTableLibrary.GitHelpers;
+using TimeTableLibrary.Helpers;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.RozkladRequests;
+using TimeTableLibrary.Mappers.Interfaces;
+using TimeTableLibrary.RozkladModels;
+using TimeTableLibrary.Mappers.RozkladMappers;
+using TimeTableLibrary.FpmModels;
+using TimeTableLibrary.Mappers.FpmMappers;
+using CoreUI.Services.Interfaces;
+using CoreUI.Services.Implementation;
+using TimeTableLibrary.Mappers;
 
 namespace CoreUI
 {
@@ -33,12 +36,18 @@ namespace CoreUI
 				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
-
-
+			services.AddOptions();
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			services.AddSingleton<FpmClient>();
 			services.AddSingleton<RozkladClient>();
-			services.AddSingleton<ShareMappingService>();
+			services.AddSingleton<IMapper<string, RozkladSubject>, RozkladSubjectMapper>();
+			services.AddSingleton<IMapper<string, RozkladTeacher>, RozkladTeacherMapper>();
+			services.AddSingleton<IMapper<string, FpmSubject>, FpmSubjectMapper>();
+			services.AddSingleton<IMapper<string, FpmTeacher>, FpmTeacherMapper>();
+			services.AddSingleton<SetService<FpmGroup>, SetSubjectsService>();
+			services.AddSingleton<SetService<FpmTeacher>, SetTeacherService>();
+			services.AddSingleton<MappingService>();
+			services.AddSingleton<ResultLessonsMapper>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

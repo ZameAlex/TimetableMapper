@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using TimeTableLibrary.GitHelpers;
+using TimeTableLibrary.Helpers;
 using TimeTableLibrary.FpmRequests;
 using TimeTableLibrary.Helpers.JsonHelper;
 using TimeTableLibrary.Mappers;

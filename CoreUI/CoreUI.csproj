@@ -11,13 +11,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-    <Folder Include="Views\Timetable\" />
-    <Folder Include="Views\Teachers\" />
+    <ProjectReference Include="..\TimeTableLibrary\TimeTableLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TimeTableLibrary\TimeTableLibrary.csproj" />
+    <Content Update="Views\Subjects\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Subjects\SubjectsMapping.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Timetable\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

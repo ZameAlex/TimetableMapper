@@ -1,0 +1,12 @@
+POST https://fpm.kpi.ua/scheduler/groups/dependence/save_subjects.do HTTP/1.1
+Accept: text/html, application/xhtml+xml, application/xml; q=0.9, image/webp, image/apng, */*; q=0.8
+Accept-Encoding: gzip, deflate
+Accept-Language: uk-UA, uk; q=0.9, ru; q=0.8, en-US; q=0.7, en; q=0.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36
+Cookie: JSESSIONID=FB26C5A3DA27C15BEE70CBE339BF1DD4; JSESSIONID=FB26C5A3DA27C15BEE70CBE339BF1DD4
+Referer: https://fpm.kpi.ua/scheduler/groups/dependence/get_subjects.do
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 122
+Host: fpm.kpi.ua
+
+group_id=gr_367&ids=sbj_289&ids=sbj_355&ids=sbj_354&ids=sbj_202&ids=sbj_322&ids=sbj_55&ids=sbj_203&ids=sbj_365&ids=sbj_242
