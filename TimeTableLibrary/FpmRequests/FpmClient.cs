@@ -74,7 +74,7 @@ namespace TimeTableLibrary.FpmRequests
 			message.Method = HttpMethod.Post;
 			message.Content = new FormUrlEncodedContent(new Dictionary<string, string>()
 			{
-				{"login", "" },
+				{"login", User.Login },
 				{"password",User.Password }
 			});
 			Encoding.GetEncoding("windows-1251");
